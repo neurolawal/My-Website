@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing | Scientist-first personal website</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="writing">
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">S</span>
+        <span class="brand-copy">
+          <strong id="brand-name">Your Name</strong>
+          <span id="brand-title">Neuroscience-focused builder</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="work.html" data-nav="work">Work</a>
+        <a href="writing.html" data-nav="writing">Writing</a>
+        <a href="about.html" data-nav="about">About</a>
+        <a href="experience.html" data-nav="experience">CV / Experience</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-intro card">
+        <p class="eyebrow">Writing</p>
+        <h1>A multi-topic blog with enough structure to stay coherent</h1>
+        <p>Use this page for essays, notes, reading reflections, design thinking, and questions in public. Topics and series keep the range intentional instead of scattered.</p>
+      </section>
+
+      <section class="card filters-card">
+        <div class="filter-group">
+          <p class="mini-label">Filter by topic</p>
+          <div class="pill-row" id="post-topic-filters"></div>
+        </div>
+        <div class="filter-group">
+          <p class="mini-label">Filter by series</p>
+          <div class="pill-row" id="post-series-filters"></div>
+        </div>
+      </section>
+
+      <section class="post-list" id="posts-list"></section>
+    </main>
+
+    <footer class="site-footer">
+      <p id="footer-copy"></p>
+      <div class="footer-links" id="footer-links"></div>
+    </footer>
+  </div>
+
+  <script src="site-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
