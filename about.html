@@ -8,16 +8,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body data-page="about">
   <nav class="global-floating-nav" aria-label="Primary navigation">
-    <a href="index.html" class="nav-logo" aria-label="Home"></a>
-    <a href="index.html" class="nav-link" data-nav="home">Home</a>
-    <a href="work.html" class="nav-link" data-nav="work">Projects</a>
-    <a href="writing.html" class="nav-link" data-nav="writing">Writing</a>
-    <a href="art.html" class="nav-link" data-nav="art">Art</a>
-    <a href="about.html" class="nav-link" data-nav="about">Formal me</a>
+    <div class="nav-mobile-header">
+      <a href="index.html" class="nav-logo" aria-label="Home"></a>
+      <button class="nav-menu-toggle" id="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+        <span class="material-symbols-rounded">menu</span>
+      </button>
+    </div>
+    <div class="nav-links-container" id="mobile-menu-dropdown">
+      <a href="index.html" class="nav-link" data-nav="home"><span class="material-symbols-rounded">home</span>Home</a>
+      <a href="work.html" class="nav-link" data-nav="work"><span class="material-symbols-rounded">folder_open</span>Projects</a>
+      <a href="writing.html" class="nav-link" data-nav="writing"><span class="material-symbols-rounded">edit_document</span>Writing</a>
+      <a href="art.html" class="nav-link" data-nav="art"><span class="material-symbols-rounded">palette</span>Art</a>
+      <a href="about.html" class="nav-link" data-nav="about"><span class="material-symbols-rounded">person</span>Formal me</a>
+    </div>
   </nav>
   <main class="minimal-page-main">
     <div class="minimal-page-header">
