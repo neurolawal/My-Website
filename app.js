@@ -600,4 +600,17 @@
     default:
       break;
   }
+
+  // Setup Mobile Navigation Toggle
+  const menuBtn = document.getElementById("mobile-menu-btn");
+  const navDropdown = document.getElementById("mobile-menu-dropdown");
+  const navWrap = document.querySelector(".global-floating-nav");
+  if (menuBtn && navWrap) {
+    menuBtn.addEventListener("click", () => {
+      navWrap.classList.toggle("is-open");
+      const expanded = navWrap.classList.contains("is-open");
+      menuBtn.setAttribute("aria-expanded", expanded);
+    });
+  }
+
 })();
