@@ -34,7 +34,7 @@
   --radius-sm: 0.125rem;
   --content-width: 1440px;
   --shadow-float: 0 20px 40px rgba(43, 52, 55, 0.05);
-  --transition: 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  --transition: 350ms ease-in-out;
 }
 
 * {
@@ -180,7 +180,7 @@ body[data-page="home"] .site-shell {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.22em;
-  color: var(--on-surface-variant);
+  color: rgba(0, 0, 0, 0.28);
   transition: color var(--transition), padding-left var(--transition);
   display: flex;
   align-items: center;
@@ -277,8 +277,9 @@ body[data-page="home"] .site-shell {
   .nav-link .material-symbols-rounded {
     display: block;
     font-size: 0.875rem;
-    color: var(--on-surface-variant);
+    color: inherit;
     font-variation-settings: 'wght' 300, 'opsz' 20;
+    transition: color var(--transition);
   }
 }
 
