@@ -423,6 +423,11 @@
     const mouse = { x: -1000, y: -1000 };
     const interactionRadius = 240;
 
+    const neuronImg = new Image();
+    let imgLoaded = false;
+    neuronImg.onload = () => { imgLoaded = true; };
+    neuronImg.src = "assets/neuron_sprite.png";
+
     function resize() {
       // Calculate layout bounds
       width = canvas.offsetWidth;
@@ -440,17 +445,18 @@
 
     function initParticles() {
       particles = [];
-      // Calculate a density that looks dense but maintains 60fps
-      // For average laptops, generating points based on area ensures no perf drop
-      const particleCount = Math.min(Math.floor((width * height) / 9000), 200); 
+      // Less particles needed because images take up more spatial canvas processing
+      const particleCount = Math.min(Math.floor((width * height) / 35000), 45); 
       
       for (let i = 0; i < particleCount; i++) {
         particles.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.35, // Slow, undulating drift
-          vy: (Math.random() - 0.5) * 0.35,
-          radius: Math.random() * 1.5 + 0.6 // Tiny axon/neuron node sizes
+          vx: (Math.random() - 0.5) * 0.45,
+          vy: (Math.random() - 0.5) * 0.45,
+          rotation: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.012,
+          scale: Math.random() * 0.5 + 0.15 
         });
       }
     }
@@ -461,15 +467,17 @@
       for (let i = 0; i < particles.length; i++) {
         let p = particles[i];
         
-        // 1. Natural drift
+        // 1. Natural drift & rotation
         p.x += p.vx;
         p.y += p.vy;
+        p.rotation += p.rotSpeed;
 
         // 2. Wrap around the screen bounds seamlessly
-        if (p.x < -10) p.x = width + 10;
-        if (p.x > width + 10) p.x = -10;
-        if (p.y < -10) p.y = height + 10;
-        if (p.y > height + 10) p.y = -10;
+        // Margin increased securely to accommodate massive biological sprite sizes without pop-in
+        if (p.x < -150) p.x = width + 150;
+        if (p.x > width + 150) p.x = -150;
+        if (p.y < -150) p.y = height + 150;
+        if (p.y > height + 150) p.y = -150;
 
         // 3. Fluid Mouse Repulsion interaction
         const dx = mouse.x - p.x;
@@ -478,33 +486,42 @@
         
         if (dist < interactionRadius) {
           const force = (interactionRadius - dist) / interactionRadius;
-          // Subtly push neurons away from cursor
           p.x -= (dx / dist) * force * 1.8;
           p.y -= (dy / dist) * force * 1.8;
         }
 
-        // Draw node
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(43, 52, 55, 0.7)"; 
-        ctx.fill();
+        // Draw Real Biological Neuron Sprite
+        if (imgLoaded) {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rotation);
+          ctx.scale(p.scale, p.scale);
+          ctx.globalAlpha = p.scale * 0.85; // Natural depth-of-field dropoff
+          ctx.globalCompositeOperation = 'multiply'; // Strips off the white bounding box 
+          
+          const spriteW = neuronImg.width || 120;
+          const spriteH = neuronImg.height || 120;
+          ctx.drawImage(neuronImg, -spriteW / 2, -spriteH / 2, spriteW, spriteH);
+          ctx.restore();
+        }
 
         // 4. Draw connecting lines (synaptic webs)
+        ctx.globalCompositeOperation = 'source-over';
         for (let j = i + 1; j < particles.length; j++) {
           let p2 = particles[j];
           let dx2 = p.x - p2.x;
           let dy2 = p.y - p2.y;
           let dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
 
-          // Only connect if they drift close to each other
-          if (dist2 < 120) {
+          // Lines connect when centers drift close
+          if (dist2 < 180) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             // Opacity scales with distance seamlessly
-            const opacity = 1 - (dist2 / 120);
-            ctx.strokeStyle = `rgba(43, 52, 55, ${opacity * 0.28})`;
-            ctx.lineWidth = 0.8;
+            const opacity = 1 - (dist2 / 180);
+            ctx.strokeStyle = `rgba(43, 52, 55, ${opacity * 0.25})`;
+            ctx.lineWidth = Math.min(p.scale, p2.scale) * 1.2;
             ctx.stroke();
           }
         }
