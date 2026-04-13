@@ -570,6 +570,8 @@ body[data-page="home"] .hero {
   transform: translateX(-50%);
   height: 100%;
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
 }
 
 .hero-stage {
