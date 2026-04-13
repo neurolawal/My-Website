@@ -285,15 +285,23 @@ body[data-page="home"] .site-shell {
     transition: color var(--transition);
   }
   /* Force mobile portrait to dictate height natively without hard viewport gaps */
+  body[data-page="home"] main {
+    display: flex;
+    flex-direction: column-reverse; /* Hurl the portrait container mathematically above text */
+  }
   .hero {
     min-height: 0;
   }
   .hero-intro-text {
-    margin-bottom: 4rem; /* Cap the text-to-portrait spacing neatly around 64px */
+    margin-bottom: 0;
+    margin-top: 1rem; /* Repel portrait downwards */
   }
   .hero-visual {
     position: relative;
     height: auto;
+    padding-bottom: 3rem; /* Establish a ghost box explicitly for the mask to fade cleanly into */
+    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 3.5rem), transparent 100%);
+    mask-image: linear-gradient(to bottom, black calc(100% - 3.5rem), transparent 100%);
   }
   .hero-stage, .hero-panel-base {
     position: relative;
