@@ -284,6 +284,34 @@ body[data-page="home"] .site-shell {
     font-variation-settings: 'wght' 300, 'opsz' 20;
     transition: color var(--transition);
   }
+  /* Force mobile portrait to dictate height natively without hard viewport gaps */
+  .hero {
+    min-height: 0;
+  }
+  .hero-intro-text {
+    margin-bottom: 4rem; /* Cap the text-to-portrait spacing neatly around 64px */
+  }
+  .hero-visual {
+    position: relative;
+    height: auto;
+  }
+  .hero-stage, .hero-panel-base {
+    position: relative;
+  }
+  .hero-panel-reveal {
+    position: absolute; /* Keep overlay layer absolute to trace the base layout perfectly */
+  }
+  .hero-bust {
+    position: relative;
+    bottom: auto;
+    left: 0;
+    transform: none;
+    margin: 0 auto;
+    display: block;
+  }
+  body[data-page="home"] .hero-bust {
+    bottom: auto;
+  }
 }
 
 main {
