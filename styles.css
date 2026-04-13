@@ -196,10 +196,15 @@ body[data-page="home"] .site-shell {
   margin-bottom: 0;
 }
 
-.global-floating-nav a.nav-link:hover,
-.global-floating-nav a.nav-link.active {
+/* Active link logic is ONLY full color when nothing is being hovered in the container */
+.nav-links-container:not(:hover) a.nav-link.active {
   color: var(--on-surface);
-  padding-left: 4px;
+}
+
+/* Flow highlight logic (fades out active element if another is hovered) */
+.nav-links-container a.nav-link:hover {
+  color: var(--on-surface);
+  padding-left: 8px;
 }
 
 .nav-link .material-symbols-rounded {
