@@ -666,6 +666,45 @@ body[data-page="home"] .hero-bust {
   max-width: min(76vw, 60rem);
 }
 
+/* ── Mobile hero layout — MUST live after all hero globals to win the cascade ── */
+@media (max-width: 1024px) {
+  .hero-visual {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    left: auto !important;
+    transform: none !important;
+    overflow: visible;
+    padding-bottom: 2rem;
+  }
+  .hero-stage {
+    position: relative !important;
+    inset: auto !important;
+    height: auto !important;
+    overflow: visible;
+  }
+  .hero-panel-base {
+    position: relative !important;
+    inset: auto !important;
+  }
+  .hero-panel-reveal {
+    display: none !important;
+  }
+  .hero-bust,
+  .hero-bust-base {
+    position: relative !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    display: block;
+    margin: 0 auto;
+    width: auto;
+    max-width: min(72vw, 26rem);
+    max-height: 55vh;
+    object-fit: contain;
+  }
+}
+
 .hero-aura {
   position: absolute;
   inset: 10% 18% 14% 25%;
