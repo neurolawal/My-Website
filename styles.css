@@ -320,7 +320,9 @@ body[data-page="home"] .site-shell {
     inset: 0;
   }
   /* Portrait image: centered block, capped width so it doesn't stretch on tablet */
-  .hero-bust {
+  .hero-bust,
+  .hero-bust-base,
+  .hero-bust-reveal {
     position: relative;
     left: auto;
     bottom: auto;
@@ -328,11 +330,16 @@ body[data-page="home"] .site-shell {
     display: block;
     margin: 0 auto;
     width: auto;
-    max-width: min(80vw, 28rem);
-    max-height: 60vh;
+    max-width: min(72vw, 26rem);
+    max-height: 55vh;
     object-fit: contain;
   }
-  body[data-page="home"] .hero-bust {
+  /* Reveal layer is a hover effect — pointless on touch, hide it */
+  .hero-panel-reveal {
+    display: none;
+  }
+  body[data-page="home"] .hero-bust,
+  body[data-page="home"] .hero-bust-base {
     bottom: auto;
   }
 }
