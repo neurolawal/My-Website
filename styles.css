@@ -239,10 +239,13 @@ body[data-page="home"] .site-shell {
     left: 0;
     width: 100%;
     flex-direction: column;
-    padding: 0;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 0 0 1.5rem 0; /* Add bottom padding so the mask doesn't clip content */
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    border-bottom: none;
     gap: 0;
   }
   .nav-mobile-header {
@@ -251,8 +254,8 @@ body[data-page="home"] .site-shell {
     padding: 0 1.5rem;
   }
   .nav-logo {
-    width: 48px;
-    height: 48px;
+    width: 28px; /* 40% reduction */
+    height: 28px;
     margin-bottom: 0;
   }
   .nav-menu-toggle {
@@ -260,9 +263,9 @@ body[data-page="home"] .site-shell {
   }
   .nav-links-container {
     display: none;
-    background: var(--background);
-    padding: 1.5rem;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
+    background: transparent;
+    padding: 0 1.5rem;
+    border-bottom: none;
   }
   .global-floating-nav.is-open .nav-links-container {
     display: flex;
