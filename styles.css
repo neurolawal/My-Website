@@ -239,12 +239,12 @@ body[data-page="home"] .site-shell {
     left: 0;
     width: 100%;
     flex-direction: column;
-    padding: 0 0 1.5rem 0; /* Add bottom padding so the mask doesn't clip content */
+    padding: 0 0 2rem 0; /* Expanded bottom padding to exclusively house the fade */
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 2rem), transparent 100%);
+    mask-image: linear-gradient(to bottom, black calc(100% - 2rem), transparent 100%);
     border-bottom: none;
     gap: 0;
   }
@@ -254,8 +254,8 @@ body[data-page="home"] .site-shell {
     padding: 0 1.5rem;
   }
   .nav-logo {
-    width: 28px; /* 40% reduction */
-    height: 28px;
+    width: 32px; /* 15% increase from 28px */
+    height: 32px;
     margin-bottom: 0;
   }
   .nav-menu-toggle {
