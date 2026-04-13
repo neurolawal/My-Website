@@ -610,6 +610,9 @@
       navWrap.classList.toggle("is-open");
       const expanded = navWrap.classList.contains("is-open");
       menuBtn.setAttribute("aria-expanded", expanded);
+      
+      const icon = menuBtn.querySelector(".material-symbols-rounded");
+      if (icon) icon.textContent = expanded ? "close" : "menu";
     });
   }
 
