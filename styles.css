@@ -334,6 +334,14 @@ body[data-page="home"] main {
   gap: 0; /* Let flex control spacing */
 }
 
+/* Mobile override — must live AFTER the global rule above to win the cascade */
+@media (max-width: 1024px) {
+  body[data-page="home"] main {
+    flex-direction: column-reverse;
+    min-height: 0;
+  }
+}
+
 /* Minimal page structure */
 .minimal-page-main {
   display: flex;
