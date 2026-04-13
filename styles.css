@@ -414,6 +414,18 @@ main img {
   min-height: calc(100vh - 9rem);
 }
 
+.hero-bg-layer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  height: 100vh;
+  transform: translateX(-50%);
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+}
+
 body[data-page="home"] .hero {
   /* Span the rest of the viewport underneath the text block */
   flex: 1;
