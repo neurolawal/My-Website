@@ -445,18 +445,21 @@
 
     function initParticles() {
       particles = [];
-      // Less particles needed because images take up more spatial canvas processing
-      const particleCount = Math.min(Math.floor((width * height) / 35000), 45); 
+      const particleCount = Math.min(Math.floor((width * height) / 22000), 85); 
       
       for (let i = 0; i < particleCount; i++) {
+        const initialVx = (Math.random() - 0.5) * 0.45;
+        const initialVy = (Math.random() - 0.5) * 0.45;
         particles.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.45,
-          vy: (Math.random() - 0.5) * 0.45,
+          vx: initialVx,
+          vy: initialVy,
+          baseVx: initialVx,
+          baseVy: initialVy,
           rotation: Math.random() * Math.PI * 2,
-          rotSpeed: (Math.random() - 0.5) * 0.012,
-          scale: Math.random() * 0.5 + 0.15 
+          rotSpeed: (Math.random() - 0.5) * 0.008,
+          scale: Math.random() * 0.35 + 0.1 
         });
       }
     }
@@ -486,9 +489,14 @@
         
         if (dist < interactionRadius) {
           const force = (interactionRadius - dist) / interactionRadius;
-          p.x -= (dx / dist) * force * 1.8;
-          p.y -= (dy / dist) * force * 1.8;
+          // Apply gentle acceleration pushing OUT instead of hard position teleporting
+          p.vx -= (dx / dist) * force * 0.15;
+          p.vy -= (dy / dist) * force * 0.15;
         }
+
+        // Apply smooth friction pulling back securely to natural drifting speed
+        p.vx += (p.baseVx - p.vx) * 0.04;
+        p.vy += (p.baseVy - p.vy) * 0.04;
 
         // Draw Real Biological Neuron Sprite
         if (imgLoaded) {
@@ -496,7 +504,7 @@
           ctx.translate(p.x, p.y);
           ctx.rotate(p.rotation);
           ctx.scale(p.scale, p.scale);
-          ctx.globalAlpha = p.scale * 0.85; // Natural depth-of-field dropoff
+          ctx.globalAlpha = p.scale * 0.4; // Reduced global opacity by >40%
           ctx.globalCompositeOperation = 'multiply'; // Strips off the white bounding box 
           
           const spriteW = neuronImg.width || 120;
@@ -518,8 +526,8 @@
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            // Opacity scales with distance seamlessly
-            const opacity = 1 - (dist2 / 180);
+            // Opacity scales with distance seamlessly, globally reduced structural opacity
+            const opacity = (1 - (dist2 / 180)) * 0.5;
             ctx.strokeStyle = `rgba(43, 52, 55, ${opacity * 0.25})`;
             ctx.lineWidth = Math.min(p.scale, p2.scale) * 1.2;
             ctx.stroke();
