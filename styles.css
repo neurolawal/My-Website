@@ -286,8 +286,8 @@ body[data-page="home"] .site-shell {
   }
   /* Force mobile portrait to dictate height natively without hard viewport gaps */
   body[data-page="home"] main {
-    display: flex;
-    flex-direction: column-reverse; /* Hurl the portrait container mathematically above text */
+    flex-direction: column-reverse;
+    min-height: 0; /* Override the desktop 100vh lock */
   }
   .hero {
     min-height: 0;
