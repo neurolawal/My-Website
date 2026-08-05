@@ -72,7 +72,7 @@
         const topic = data.topics.find((item) => item.slug === value);
         const label = topic ? topic.name : value;
         if (withLinks && topic) {
-          return `<span class="pill"><a href="topic.html?slug=${escapeHtml(topic.slug)}">${escapeHtml(label)}</a></span>`;
+          return `<span class="pill"><a href="topic?slug=${escapeHtml(topic.slug)}">${escapeHtml(label)}</a></span>`;
         }
         return `<span class="pill">${escapeHtml(label)}</span>`;
       })
@@ -97,7 +97,7 @@
 
   function renderFeatureProject(project) {
     return `
-      <a class="feature-item" href="project.html?slug=${escapeHtml(project.slug)}">
+      <a class="feature-item" href="project?slug=${escapeHtml(project.slug)}">
         <p class="eyebrow">${escapeHtml(project.type)}</p>
         <h3>${escapeHtml(project.title)}</h3>
         <p>${escapeHtml(project.shortSummary)}</p>
@@ -111,7 +111,7 @@
 
   function renderFeaturePost(post) {
     return `
-      <a class="feature-item" href="post.html?slug=${escapeHtml(post.slug)}">
+      <a class="feature-item" href="post?slug=${escapeHtml(post.slug)}">
         <p class="eyebrow">${escapeHtml(post.series)}</p>
         <h3>${escapeHtml(post.title)}</h3>
         <p>${escapeHtml(post.excerpt)}</p>
@@ -315,7 +315,7 @@
         <h2>Related writing</h2>
         <div class="detail-related-grid">
           ${relatedPosts.length ? relatedPosts.map((post) => `
-            <a class="detail-related-card" href="post.html?slug=${escapeHtml(post.slug)}">
+            <a class="detail-related-card" href="post?slug=${escapeHtml(post.slug)}">
               <p class="eyebrow">${escapeHtml(post.series)}</p>
               <h3>${escapeHtml(post.title)}</h3>
               <p>${escapeHtml(post.excerpt)}</p>
@@ -353,7 +353,7 @@
         <h2>Related work</h2>
         <div class="detail-related-grid">
           ${relatedProjects.length ? relatedProjects.map((project) => `
-            <a class="detail-related-card" href="project.html?slug=${escapeHtml(project.slug)}">
+            <a class="detail-related-card" href="project?slug=${escapeHtml(project.slug)}">
               <p class="eyebrow">${escapeHtml(project.type)}</p>
               <h3>${escapeHtml(project.title)}</h3>
               <p>${escapeHtml(project.shortSummary)}</p>
@@ -387,7 +387,7 @@
         <h2>Projects in this topic</h2>
         <div class="detail-related-grid">
           ${relatedProjects.length ? relatedProjects.map((project) => `
-            <a class="detail-related-card" href="project.html?slug=${escapeHtml(project.slug)}">
+            <a class="detail-related-card" href="project?slug=${escapeHtml(project.slug)}">
               <p class="eyebrow">${escapeHtml(project.type)}</p>
               <h3>${escapeHtml(project.title)}</h3>
               <p>${escapeHtml(project.shortSummary)}</p>
@@ -399,7 +399,7 @@
         <h2>Writing in this topic</h2>
         <div class="detail-related-grid">
           ${relatedPosts.length ? relatedPosts.map((post) => `
-            <a class="detail-related-card" href="post.html?slug=${escapeHtml(post.slug)}">
+            <a class="detail-related-card" href="post?slug=${escapeHtml(post.slug)}">
               <p class="eyebrow">${escapeHtml(post.series)}</p>
               <h3>${escapeHtml(post.title)}</h3>
               <p>${escapeHtml(post.excerpt)}</p>

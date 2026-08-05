@@ -24,8 +24,8 @@ window.SITE_DATA = {
       "A body of work that can grow across disciplines"
     ],
     primaryCtas: [
-      { label: "See selected work", href: "work.html", variant: "primary" },
-      { label: "Read the writing", href: "writing.html", variant: "ghost" }
+      { label: "See selected work", href: "work", variant: "primary" },
+      { label: "Read the writing", href: "writing", variant: "ghost" }
     ],
     socialLinks: [
       { label: "Email", href: "mailto:you@example.com" },
@@ -106,7 +106,7 @@ window.SITE_DATA = {
       outcome: "Positions scientific curiosity as an active body of work rather than a private backlog.",
       cover: "",
       links: [
-        { label: "Related topic", href: "topic.html?slug=neurotechnology" }
+        { label: "Related topic", href: "topic?slug=neurotechnology" }
       ],
       featured: true
     },
@@ -259,7 +259,7 @@ window.SITE_DATA = {
         "Supports public thinking around career direction and technical interests",
         "Creates continuity between the Work and Writing sections of the site"
       ],
-      link: "writing.html",
+      link: "writing",
       relatedProjectSlugs: [],
       relatedPostSlugs: [
         "why-neurotechnology-keeps-pulling-me-in",
