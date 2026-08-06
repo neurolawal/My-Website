@@ -562,10 +562,30 @@ body[data-page="home"] .hero {
   pointer-events: auto;
   width: 250px;
   max-width: 44%;
+}
+
+.hero-side-card-left {
   background: transparent;
   border: none;
   box-shadow: none;
   padding: 0;
+}
+
+.hero-side-card-right {
+  background: rgba(253, 252, 251, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 16px;
+  padding: 1.5rem 1.6rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+  transform: translateX(4.5rem);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.hero-side-card-right:hover {
+  transform: translate(4.5rem, -3px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
 .hero-card-title {
@@ -583,7 +603,11 @@ body[data-page="home"] .hero {
   font-size: 0.95rem;
   line-height: 1.5;
   color: var(--on-surface-variant);
-  margin: 0;
+  margin: 0 0 0.85rem 0;
+}
+
+.hero-card-body:last-child {
+  margin-bottom: 0;
 }
 
 .hero-copy {
