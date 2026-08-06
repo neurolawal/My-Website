@@ -411,8 +411,9 @@
   }
 
   function initNeuronNetwork() {
+    const ENABLE_NEURON_CANVAS = false; // Set to true to re-enable background neuron network
     const canvas = document.getElementById("neuron-canvas");
-    if (!canvas) return;
+    if (!canvas || !ENABLE_NEURON_CANVAS) return;
     const ctx = canvas.getContext("2d");
 
     let width, height;
