@@ -539,6 +539,59 @@ body[data-page="home"] .hero {
 
 .hero-portrait-layout {
   display: block;
+  position: relative;
+  width: 100%;
+}
+
+/* ── Hero Side Cards (Flanking Portrait) ────────────────────────── */
+.hero-side-cards-container {
+  position: absolute;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(100%, 1280px);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 3rem;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hero-side-card {
+  pointer-events: auto;
+  width: min(300px, 28vw);
+  background: rgba(253, 252, 251, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 16px;
+  padding: 1.5rem 1.6rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.hero-side-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.hero-card-title {
+  font-family: "Cabinet Grotesk", "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.75rem 0;
+  color: var(--on-surface);
+  line-height: 1.2;
+}
+
+.hero-card-body {
+  font-family: "Instrument Serif", serif;
+  font-size: 1.05rem;
+  line-height: 1.45;
+  color: var(--on-surface-variant);
+  margin: 0;
 }
 
 .hero-copy {
@@ -669,6 +722,20 @@ body[data-page="home"] .hero-bust {
 
 /* ── Mobile hero layout — MUST live after all hero globals to win the cascade ── */
 @media (max-width: 1024px) {
+  .hero-side-cards-container {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    flex-direction: column !important;
+    gap: 1.25rem !important;
+    padding: 1.5rem 1.25rem 0 1.25rem !important;
+  }
+  .hero-side-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
   .hero-visual {
     position: relative !important;
     width: 100% !important;
