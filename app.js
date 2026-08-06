@@ -437,11 +437,12 @@
 
     function initParticles() {
       particles = [];
-      const particleCount = Math.min(Math.floor((width * height) / 11000), 130); 
+      const particleCount = Math.min(Math.floor((width * height) / 6000), 220); 
       
       for (let i = 0; i < particleCount; i++) {
         const x = Math.random() * width;
         const y = Math.random() * height;
+        const baseAlpha = 0.20 + Math.random() * 0.08; // Clearly visible in rest state
         particles.push({
           x: x,
           y: y,
@@ -449,9 +450,9 @@
           oy: y, // Anchor position Y
           vx: (Math.random() - 0.5) * 0.35,
           vy: (Math.random() - 0.5) * 0.35,
-          radius: Math.random() * 1.5 + 1.2, // Delicate dots (1.2px - 2.7px)
-          baseAlpha: 0.04 + Math.random() * 0.03, // Faint initial blending
-          alpha: 0.04,
+          radius: Math.random() * 1.6 + 1.8, // Crisp dot size (1.8px - 3.4px)
+          baseAlpha: baseAlpha, 
+          alpha: baseAlpha,
           darken: 0
         });
       }
@@ -486,12 +487,12 @@
           if (dist < interactionRadius) {
             proximityRatio = 1 - (dist / interactionRadius);
             // Magnetic attraction force: pull nodes inward toward the cursor
-            const pullFactor = Math.pow(proximityRatio, 1.4) * 65; 
+            const pullFactor = Math.pow(proximityRatio, 1.4) * 70; 
             targetX = p.ox + (dx / (dist || 1)) * pullFactor;
             targetY = p.oy + (dy / (dist || 1)) * pullFactor;
             
-            // Darken alpha near mouse (from ~0.04 up to ~0.45 charcoal)
-            targetAlpha = p.baseAlpha + proximityRatio * 0.42;
+            // Darken alpha significantly near mouse (up to ~0.85 rich dark charcoal)
+            targetAlpha = p.baseAlpha + proximityRatio * 0.55;
           }
         }
 
@@ -503,8 +504,8 @@
 
         // 3. Draw dot node
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius * (1 + p.darken * 0.6), 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(30, 32, 35, ${p.alpha})`;
+        ctx.arc(p.x, p.y, p.radius * (1 + p.darken * 0.7), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(18, 20, 24, ${p.alpha})`;
         ctx.fill();
 
         // 4. Draw synaptic web connecting lines
@@ -514,18 +515,18 @@
           let dy2 = p.y - p2.y;
           let dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
 
-          if (dist2 < 130) {
+          if (dist2 < 140) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             
             const lineProximity = Math.max(p.darken, p2.darken);
-            const baseLineAlpha = (1 - (dist2 / 130)) * 0.04;
-            const activeLineAlpha = (1 - (dist2 / 130)) * 0.32;
+            const baseLineAlpha = (1 - (dist2 / 140)) * 0.14; // Clearly visible unactive lines
+            const activeLineAlpha = (1 - (dist2 / 140)) * 0.55; // Rich dark active lines
             const lineAlpha = baseLineAlpha + lineProximity * (activeLineAlpha - baseLineAlpha);
 
-            ctx.strokeStyle = `rgba(30, 32, 35, ${lineAlpha})`;
-            ctx.lineWidth = 0.65 + lineProximity * 0.55;
+            ctx.strokeStyle = `rgba(18, 20, 24, ${lineAlpha})`;
+            ctx.lineWidth = 0.8 + lineProximity * 0.8;
             ctx.stroke();
           }
         }
