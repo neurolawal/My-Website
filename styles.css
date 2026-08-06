@@ -637,6 +637,29 @@ body[data-page="home"] .hero {
   color: rgba(0, 0, 0, 0.3);
 }
 
+.hero-card-list li.has-loader::before {
+  content: none;
+}
+
+@keyframes mini-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mini-spinner {
+  position: absolute;
+  left: 0;
+  top: 0.35rem;
+  width: 9px;
+  height: 9px;
+  border: 1.5px solid rgba(0, 0, 0, 0.18);
+  border-top-color: var(--on-surface);
+  border-radius: 50%;
+  animation: mini-spin 0.9s linear infinite;
+  display: inline-block;
+}
+
 .hero-card-link,
 .hero-card-body a {
   color: var(--on-surface);
