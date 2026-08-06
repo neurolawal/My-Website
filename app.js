@@ -419,22 +419,14 @@
     let particles = [];
     let rafId = 0;
 
-    // Mouse tracking for fluid push effect
-    const mouse = { x: -1000, y: -1000 };
+    // Mouse tracking state for fluid attraction effect
+    const mouse = { x: -1000, y: -1000, active: false };
     const interactionRadius = 240;
 
-    const neuronImg = new Image();
-    let imgLoaded = false;
-    neuronImg.onload = () => { imgLoaded = true; };
-    neuronImg.src = "assets/neuron_sprite.png";
-
     function resize() {
-      // Calculate layout bounds
-      width = canvas.offsetWidth;
-      height = canvas.offsetHeight;
+      width = canvas.offsetWidth || window.innerWidth;
+      height = canvas.offsetHeight || window.innerHeight;
       
-      // Best Practice: Handle high-res retina screens cleanly
-      // We scale the actual canvas bitmap pixel ratio up to match the hardwaredpi
       const dpi = window.devicePixelRatio || 1;
       canvas.width = width * dpi;
       canvas.height = height * dpi;
@@ -445,21 +437,22 @@
 
     function initParticles() {
       particles = [];
-      const particleCount = Math.min(Math.floor((width * height) / 22000), 85); 
+      const particleCount = Math.min(Math.floor((width * height) / 11000), 130); 
       
       for (let i = 0; i < particleCount; i++) {
-        const initialVx = (Math.random() - 0.5) * 0.45;
-        const initialVy = (Math.random() - 0.5) * 0.45;
+        const x = Math.random() * width;
+        const y = Math.random() * height;
         particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: initialVx,
-          vy: initialVy,
-          baseVx: initialVx,
-          baseVy: initialVy,
-          rotation: Math.random() * Math.PI * 2,
-          rotSpeed: (Math.random() - 0.5) * 0.008,
-          scale: Math.random() * 0.35 + 0.1 
+          x: x,
+          y: y,
+          ox: x, // Anchor position X
+          oy: y, // Anchor position Y
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
+          radius: Math.random() * 1.5 + 1.2, // Delicate dots (1.2px - 2.7px)
+          baseAlpha: 0.04 + Math.random() * 0.03, // Faint initial blending
+          alpha: 0.04,
+          darken: 0
         });
       }
     }
@@ -470,66 +463,69 @@
       for (let i = 0; i < particles.length; i++) {
         let p = particles[i];
         
-        // 1. Natural drift & rotation
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rotation += p.rotSpeed;
+        // 1. Natural subtle floating drift
+        p.ox += p.vx;
+        p.oy += p.vy;
 
-        // 2. Wrap around the screen bounds seamlessly
-        // Margin increased securely to accommodate massive biological sprite sizes without pop-in
-        if (p.x < -150) p.x = width + 150;
-        if (p.x > width + 150) p.x = -150;
-        if (p.y < -150) p.y = height + 150;
-        if (p.y > height + 150) p.y = -150;
+        if (p.ox < -50) p.ox = width + 50;
+        if (p.ox > width + 50) p.ox = -50;
+        if (p.oy < -50) p.oy = height + 50;
+        if (p.oy > height + 50) p.oy = -50;
 
-        // 3. Fluid Mouse Repulsion interaction
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        
-        if (dist < interactionRadius) {
-          const force = (interactionRadius - dist) / interactionRadius;
-          // Apply gentle acceleration pushing OUT instead of hard position teleporting
-          p.vx -= (dx / dist) * force * 0.15;
-          p.vy -= (dy / dist) * force * 0.15;
-        }
+        let targetX = p.ox;
+        let targetY = p.oy;
+        let targetAlpha = p.baseAlpha;
+        let proximityRatio = 0;
 
-        // Apply smooth friction pulling back securely to natural drifting speed
-        p.vx += (p.baseVx - p.vx) * 0.04;
-        p.vy += (p.baseVy - p.vy) * 0.04;
-
-        // Draw Real Biological Neuron Sprite
-        if (imgLoaded) {
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate(p.rotation);
-          ctx.scale(p.scale, p.scale);
-          ctx.globalAlpha = p.scale * 0.4; // Reduced global opacity by >40%
-          ctx.globalCompositeOperation = 'multiply'; // Strips off the white bounding box 
+        // 2. Fluid Mouse Attraction & Darkening
+        if (mouse.active) {
+          const dx = mouse.x - p.ox;
+          const dy = mouse.y - p.oy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
           
-          const spriteW = neuronImg.width || 120;
-          const spriteH = neuronImg.height || 120;
-          ctx.drawImage(neuronImg, -spriteW / 2, -spriteH / 2, spriteW, spriteH);
-          ctx.restore();
+          if (dist < interactionRadius) {
+            proximityRatio = 1 - (dist / interactionRadius);
+            // Magnetic attraction force: pull nodes inward toward the cursor
+            const pullFactor = Math.pow(proximityRatio, 1.4) * 65; 
+            targetX = p.ox + (dx / (dist || 1)) * pullFactor;
+            targetY = p.oy + (dy / (dist || 1)) * pullFactor;
+            
+            // Darken alpha near mouse (from ~0.04 up to ~0.45 charcoal)
+            targetAlpha = p.baseAlpha + proximityRatio * 0.42;
+          }
         }
 
-        // 4. Draw connecting lines (synaptic webs)
-        ctx.globalCompositeOperation = 'source-over';
+        // Smooth physics lerp
+        p.x += (targetX - p.x) * 0.1;
+        p.y += (targetY - p.y) * 0.1;
+        p.alpha += (targetAlpha - p.alpha) * 0.1;
+        p.darken += (proximityRatio - p.darken) * 0.1;
+
+        // 3. Draw dot node
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius * (1 + p.darken * 0.6), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(30, 32, 35, ${p.alpha})`;
+        ctx.fill();
+
+        // 4. Draw synaptic web connecting lines
         for (let j = i + 1; j < particles.length; j++) {
           let p2 = particles[j];
           let dx2 = p.x - p2.x;
           let dy2 = p.y - p2.y;
           let dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
 
-          // Lines connect when centers drift close
-          if (dist2 < 180) {
+          if (dist2 < 130) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            // Opacity scales with distance seamlessly, globally reduced structural opacity
-            const opacity = (1 - (dist2 / 180)) * 0.5;
-            ctx.strokeStyle = `rgba(43, 52, 55, ${opacity * 0.25})`;
-            ctx.lineWidth = Math.min(p.scale, p2.scale) * 1.2;
+            
+            const lineProximity = Math.max(p.darken, p2.darken);
+            const baseLineAlpha = (1 - (dist2 / 130)) * 0.04;
+            const activeLineAlpha = (1 - (dist2 / 130)) * 0.32;
+            const lineAlpha = baseLineAlpha + lineProximity * (activeLineAlpha - baseLineAlpha);
+
+            ctx.strokeStyle = `rgba(30, 32, 35, ${lineAlpha})`;
+            ctx.lineWidth = 0.65 + lineProximity * 0.55;
             ctx.stroke();
           }
         }
@@ -538,26 +534,24 @@
     }
 
     window.addEventListener("resize", () => {
-      // Best Practice: Clear old animation loop when resizing window
       cancelAnimationFrame(rafId);
       resize();
       draw();
     });
 
-    // Listen to mouse actions directly on hero to feed cursor positions to the canvas
-    const heroVisual = document.querySelector(".hero-mask-container");
-    if (heroVisual) {
-      heroVisual.addEventListener("pointermove", (e) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-      });
-      heroVisual.addEventListener("pointerleave", () => {
-        // Shunt mouse coords off-screen when out of focus
-        mouse.x = -1000;
-        mouse.y = -1000;
-      });
-    }
+    // Listen to pointer movement globally across screen
+    window.addEventListener("pointermove", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+      mouse.active = true;
+    });
+
+    window.addEventListener("pointerleave", () => {
+      mouse.active = false;
+      mouse.x = -1000;
+      mouse.y = -1000;
+    });
 
     resize();
     draw();
