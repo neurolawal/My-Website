@@ -610,6 +610,46 @@ body[data-page="home"] .hero {
   margin-bottom: 0;
 }
 
+.hero-card-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hero-card-list li {
+  font-family: "Cabinet Grotesk", "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--on-surface-variant);
+  margin-bottom: 0.65rem;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.hero-card-list li:last-child {
+  margin-bottom: 0;
+}
+
+.hero-card-list li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.hero-card-link,
+.hero-card-body a {
+  color: var(--on-surface);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition);
+}
+
+.hero-card-link:hover,
+.hero-card-body a:hover {
+  color: var(--primary);
+}
+
 .hero-copy {
   position: absolute;
   top: 1.2rem;
