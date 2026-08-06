@@ -549,18 +549,19 @@ body[data-page="home"] .hero {
   top: 32%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(100%, 1280px);
+  width: min(100%, 46rem);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 0 3rem;
+  padding: 0 1.5rem;
   z-index: 10;
   pointer-events: none;
 }
 
 .hero-side-card {
   pointer-events: auto;
-  width: min(300px, 28vw);
+  width: 250px;
+  max-width: 44%;
   background: rgba(253, 252, 251, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
