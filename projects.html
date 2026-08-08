@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Art | Samuel Lawal</title>
+  <title>Projects | Samuel Lawal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400&display=swap" rel="stylesheet">
@@ -11,7 +11,7 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body data-page="art">
+<body data-page="projects">
   <nav class="global-floating-nav" aria-label="Primary navigation">
     <div class="nav-mobile-header">
       <a href="/" class="nav-logo" aria-label="Home"></a>
@@ -29,8 +29,28 @@
   </nav>
   <main class="minimal-page-main">
     <div class="minimal-page-header">
-      <h1 class="minimal-title">Art</h1>
-      <p class="minimal-desc">Explorations in visual art.</p>
+      <h1 class="minimal-title">Projects</h1>
+      <p class="minimal-desc">A running index of prototypes, experiments, and tools. Focused heavily on interface design and cognitive systems.</p>
+    </div>
+
+    <div class="projects-section-container">
+      <div class="projects-controls-bar">
+        <div class="project-tag-filters" role="tablist" aria-label="Project category filters">
+          <button class="project-filter-chip active" data-tag="all">All</button>
+          <button class="project-filter-chip" data-tag="neurotech">Neurotech</button>
+          <button class="project-filter-chip" data-tag="design">Design</button>
+        </div>
+        <div class="view-mode-toggle" role="radiogroup" aria-label="View layout switcher">
+          <button class="view-toggle-btn active" data-view="grid" aria-label="Grid View" title="Grid View">
+            <i class="ph ph-squares-four"></i>
+          </button>
+          <button class="view-toggle-btn" data-view="list" aria-label="List View" title="List View">
+            <i class="ph ph-list-dashes"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="projects-container" class="projects-content-wrapper"></div>
     </div>
   </main>
   <script src="site-data.js"></script>

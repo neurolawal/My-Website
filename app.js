@@ -56,7 +56,7 @@
     }
 
     const navTarget = page === "project-detail" || page === "topic-detail"
-      ? "work"
+      ? "projects"
       : page === "post-detail"
         ? "writing"
         : page;
@@ -162,7 +162,7 @@
 
     const heroTitle = $("#hero-title");
     if (heroTitle) heroTitle.innerHTML = `I&rsquo;m building a career in <span class="hero-highlight">neuroscience</span>, with strong <span class="hero-italic">neurotechnology</span> interests.`;
-    
+
     if ($("#hero-summary")) $("#hero-summary").textContent = settings.shortBio;
     if ($("#current-focus")) $("#current-focus").textContent = settings.currentFocus;
     if ($("#career-arc")) $("#career-arc").textContent = settings.careerArc;
@@ -241,7 +241,7 @@
       // Snap position to exactly where the mouse enters to originate the bloom there
       currentX = targetX = ((event.clientX - rect.left) / rect.width) * 100;
       currentY = targetY = ((event.clientY - rect.top) / rect.height) * 100;
-      
+
       isActive = true;
       targetSize = 24; // Expanded blob size
       heroContainer.classList.add("is-active");
@@ -264,7 +264,107 @@
   }
 
   function renderProjects() {
-    // Render stripped for content rewrite mode
+    const container = $("#projects-container");
+    const viewBtns = document.querySelectorAll(".view-toggle-btn");
+    const filterBtns = document.querySelectorAll(".project-filter-chip");
+
+    if (!container) return;
+
+    let currentView = localStorage.getItem("projectsViewMode") || "grid";
+    let currentTag = "all";
+
+    function getFilteredProjects() {
+      if (currentTag === "all") return data.projects;
+      return data.projects.filter((p) => {
+        const typeStr = (p.type || "").toLowerCase();
+        const topicsStr = (p.topics || []).join(" ").toLowerCase();
+        if (currentTag === "neurotech") {
+          return typeStr.includes("neurotech") || topicsStr.includes("neurotech") || topicsStr.includes("neuroscience");
+        }
+        if (currentTag === "design") {
+          return typeStr.includes("design") || topicsStr.includes("design");
+        }
+        return true;
+      });
+    }
+
+    function render() {
+      const items = getFilteredProjects();
+      container.className = `projects-content-wrapper view-mode-${currentView}`;
+
+      if (currentView === "grid") {
+        container.innerHTML = `
+          <div class="projects-grid">
+            ${items.map(renderProjectGridCard).join("")}
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="projects-list">
+            ${items.map(renderProjectListRow).join("")}
+          </div>
+        `;
+      }
+    }
+
+    viewBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        currentView = btn.dataset.view;
+        localStorage.setItem("projectsViewMode", currentView);
+        viewBtns.forEach((b) => b.classList.toggle("active", b.dataset.view === currentView));
+        render();
+      });
+    });
+
+    filterBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        currentTag = btn.dataset.tag;
+        filterBtns.forEach((b) => b.classList.toggle("active", b.dataset.tag === currentTag));
+        render();
+      });
+    });
+
+    render();
+  }
+
+  function renderProjectGridCard(p) {
+    return `
+      <article class="project-grid-card">
+        <a href="project.html?slug=${escapeHtml(p.slug)}" class="project-card-image-link">
+          <div class="project-card-image-wrapper">
+            <img src="${escapeHtml(p.cover)}" alt="${escapeHtml(p.title)}" class="project-card-image" loading="lazy">
+          </div>
+        </a>
+        <div class="project-card-content">
+          <div class="project-card-header-row">
+            <h2 class="project-card-title">
+              <a href="project.html?slug=${escapeHtml(p.slug)}">${escapeHtml(p.title)}</a>
+            </h2>
+            <span class="project-card-year">${escapeHtml(p.year)}</span>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  function renderProjectListRow(p) {
+    return `
+      <article class="project-list-row">
+        <a href="project.html?slug=${escapeHtml(p.slug)}" class="project-list-image-link">
+          <div class="project-list-thumb-wrapper">
+            <img src="${escapeHtml(p.cover)}" alt="${escapeHtml(p.title)}" class="project-list-thumb" loading="lazy">
+          </div>
+        </a>
+        <div class="project-list-body">
+          <div class="project-list-title-row">
+            <h2 class="project-list-title">
+              <a href="project.html?slug=${escapeHtml(p.slug)}">${escapeHtml(p.title)}</a>
+            </h2>
+            <span class="project-list-year">${escapeHtml(p.year)}</span>
+          </div>
+        </div>
+      </article>
+    `;
   }
 
   function renderPosts() {
@@ -427,19 +527,19 @@
     function resize() {
       width = canvas.offsetWidth || window.innerWidth;
       height = canvas.offsetHeight || window.innerHeight;
-      
+
       const dpi = window.devicePixelRatio || 1;
       canvas.width = width * dpi;
       canvas.height = height * dpi;
       ctx.scale(dpi, dpi);
-      
+
       initParticles();
     }
 
     function initParticles() {
       particles = [];
-      const particleCount = Math.min(Math.floor((width * height) / 6000), 220); 
-      
+      const particleCount = Math.min(Math.floor((width * height) / 6000), 220);
+
       for (let i = 0; i < particleCount; i++) {
         const x = Math.random() * width;
         const y = Math.random() * height;
@@ -452,7 +552,7 @@
           vx: (Math.random() - 0.5) * 0.35,
           vy: (Math.random() - 0.5) * 0.35,
           radius: Math.random() * 1.6 + 1.8, // Crisp dot size (1.8px - 3.4px)
-          baseAlpha: baseAlpha, 
+          baseAlpha: baseAlpha,
           alpha: baseAlpha,
           darken: 0
         });
@@ -461,10 +561,10 @@
 
     function draw() {
       ctx.clearRect(0, 0, width, height);
-      
+
       for (let i = 0; i < particles.length; i++) {
         let p = particles[i];
-        
+
         // 1. Natural subtle floating drift
         p.ox += p.vx;
         p.oy += p.vy;
@@ -484,14 +584,14 @@
           const dx = mouse.x - p.ox;
           const dy = mouse.y - p.oy;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          
+
           if (dist < interactionRadius) {
             proximityRatio = 1 - (dist / interactionRadius);
             // Magnetic attraction force: pull nodes inward toward the cursor
-            const pullFactor = Math.pow(proximityRatio, 1.4) * 70; 
+            const pullFactor = Math.pow(proximityRatio, 1.4) * 70;
             targetX = p.ox + (dx / (dist || 1)) * pullFactor;
             targetY = p.oy + (dy / (dist || 1)) * pullFactor;
-            
+
             // Darken alpha significantly near mouse (up to ~0.85 rich dark charcoal)
             targetAlpha = p.baseAlpha + proximityRatio * 0.55;
           }
@@ -520,7 +620,7 @@
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            
+
             const lineProximity = Math.max(p.darken, p2.darken);
             const baseLineAlpha = (1 - (dist2 / 140)) * 0.14; // Clearly visible unactive lines
             const activeLineAlpha = (1 - (dist2 / 140)) * 0.55; // Rich dark active lines
@@ -564,17 +664,17 @@
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
-    
+
     img.onload = () => {
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
-      
+
       // Paint the non-transparent pixels appropriately
       ctx.globalCompositeOperation = "source-in";
-      ctx.fillStyle = isDark ? "#ffffff" : "#1e1e1e"; 
+      ctx.fillStyle = isDark ? "#ffffff" : "#1e1e1e";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
+
       let link = document.querySelector("link[rel~='icon']");
       if (!link) {
         link = document.createElement('link');
@@ -588,15 +688,87 @@
 
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', initDynamicFavicon);
 
+  function initBackgroundAudio() {
+    const audioSrc = "assets/Pirates%20Of%20The%20Caribbean%20-%20Main%20Theme%20-%20He's%20A%20Pirate.mp3";
+    let audio = document.getElementById("site-bg-audio");
+
+    if (!audio) {
+      audio = document.createElement("audio");
+      audio.id = "site-bg-audio";
+      audio.src = audioSrc;
+      audio.loop = true;
+      audio.autoplay = true;
+      audio.preload = "auto";
+      audio.volume = 0.5;
+      document.body.appendChild(audio);
+    } else {
+      audio.volume = 0.5;
+    }
+
+    let toggleBtn = document.getElementById("audio-toggle-btn");
+    if (!toggleBtn) {
+      toggleBtn = document.createElement("button");
+      toggleBtn.id = "audio-toggle-btn";
+      toggleBtn.className = "floating-audio-toggle";
+      toggleBtn.setAttribute("aria-label", "Toggle background audio");
+      toggleBtn.setAttribute("title", "Pirates of the Caribbean Soundtrack");
+      toggleBtn.innerHTML = `<i class="ph ph-speaker-high"></i>`;
+      document.body.appendChild(toggleBtn);
+    }
+
+    function updateBtnState() {
+      const icon = toggleBtn.querySelector("i");
+      if (audio.paused) {
+        toggleBtn.classList.remove("is-playing");
+        if (icon) icon.className = "ph ph-speaker-slash";
+      } else {
+        toggleBtn.classList.add("is-playing");
+        if (icon) icon.className = "ph ph-speaker-high";
+      }
+    }
+
+    function tryPlay() {
+      if (audio.paused) {
+        audio.play().then(() => {
+          updateBtnState();
+        }).catch(() => {});
+      }
+    }
+
+    tryPlay();
+    window.addEventListener("load", tryPlay);
+
+    const userEvents = ["pointerdown", "mousemove", "scroll", "keydown", "touchstart"];
+    const onUserInteraction = () => {
+      tryPlay();
+    };
+
+    userEvents.forEach((evt) => {
+      window.addEventListener(evt, onUserInteraction, { passive: true });
+    });
+
+    toggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (audio.paused) {
+        audio.play().then(updateBtnState);
+      } else {
+        audio.pause();
+        updateBtnState();
+      }
+    });
+  }
+
   setGlobalChrome();
   attachHeroMotion();
   initNeuronNetwork();
   initDynamicFavicon();
+  initBackgroundAudio();
 
   switch (page) {
     case "home":
       renderHome();
       break;
+    case "projects":
     case "work":
       renderProjects();
       break;
@@ -631,9 +803,9 @@
       navWrap.classList.toggle("is-open");
       const expanded = navWrap.classList.contains("is-open");
       menuBtn.setAttribute("aria-expanded", expanded);
-      
-      const icon = menuBtn.querySelector(".material-symbols-rounded");
-      if (icon) icon.textContent = expanded ? "close" : "menu";
+
+      const icon = menuBtn.querySelector("i");
+      if (icon) icon.className = expanded ? "ph ph-x" : "ph ph-list";
     });
   }
 
