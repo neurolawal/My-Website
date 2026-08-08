@@ -1965,7 +1965,18 @@ body[data-page="home"] .hero-bust {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-.floating-audio-toggle .material-symbols-rounded {
-  font-size: 1.25rem;
-  transition: color 0.2s ease;
+.floating-audio-toggle .material-symbols-rounded,
+.floating-audio-toggle .ph {
+  font-size: 1.35rem;
+  transition: opacity 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.floating-audio-toggle.is-muted .ph,
+.floating-audio-toggle .muted-clef {
+  opacity: 0.4;
+}
+
+.floating-audio-toggle.is-playing .ph {
+  opacity: 1;
+  color: var(--on-surface);
 }

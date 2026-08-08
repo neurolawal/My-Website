@@ -726,8 +726,9 @@
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', initDynamicFavicon);
 
   function initBackgroundAudio() {
-    const audioSrc = "assets/Pirates%20Of%20The%20Caribbean%20-%20Main%20Theme%20-%20He's%20A%20Pirate.mp3";
+    const audioSrc = "assets/Pirates Of The Caribbean - Main Theme - He's A Pirate.mp3";
     let audio = document.getElementById("site-bg-audio");
+    let userHasMuted = localStorage.getItem("siteAudioMuted") === "true";
 
     if (!audio) {
       audio = document.createElement("audio");
@@ -749,22 +750,25 @@
       toggleBtn.className = "floating-audio-toggle";
       toggleBtn.setAttribute("aria-label", "Toggle background audio");
       toggleBtn.setAttribute("title", "Pirates of the Caribbean Soundtrack");
-      toggleBtn.innerHTML = `<i class="ph ph-speaker-high"></i>`;
+      toggleBtn.innerHTML = `<i class="ph ph-treble-clef"></i>`;
       document.body.appendChild(toggleBtn);
     }
 
     function updateBtnState() {
       const icon = toggleBtn.querySelector("i");
-      if (audio.paused) {
+      if (audio.paused || userHasMuted) {
         toggleBtn.classList.remove("is-playing");
-        if (icon) icon.className = "ph ph-speaker-slash";
+        toggleBtn.classList.add("is-muted");
+        if (icon) icon.className = "ph ph-treble-clef muted-clef";
       } else {
         toggleBtn.classList.add("is-playing");
-        if (icon) icon.className = "ph ph-speaker-high";
+        toggleBtn.classList.remove("is-muted");
+        if (icon) icon.className = "ph ph-treble-clef";
       }
     }
 
     function tryPlay() {
+      if (userHasMuted) return;
       if (audio.paused) {
         audio.play().then(() => {
           updateBtnState();
@@ -772,27 +776,35 @@
       }
     }
 
-    tryPlay();
-    window.addEventListener("load", tryPlay);
-
-    const userEvents = ["pointerdown", "mousemove", "scroll", "keydown", "touchstart"];
-    const onUserInteraction = () => {
+    if (!userHasMuted) {
       tryPlay();
-    };
+      window.addEventListener("load", tryPlay);
 
-    userEvents.forEach((evt) => {
-      window.addEventListener(evt, onUserInteraction, { passive: true });
-    });
+      const userEvents = ["pointerdown", "mousemove", "scroll", "keydown", "touchstart"];
+      const onUserInteraction = () => {
+        tryPlay();
+      };
+
+      userEvents.forEach((evt) => {
+        window.addEventListener(evt, onUserInteraction, { passive: true });
+      });
+    }
 
     toggleBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      if (audio.paused) {
-        audio.play().then(updateBtnState);
-      } else {
+      if (!audio.paused && !userHasMuted) {
         audio.pause();
+        userHasMuted = true;
+        localStorage.setItem("siteAudioMuted", "true");
         updateBtnState();
+      } else {
+        userHasMuted = false;
+        localStorage.setItem("siteAudioMuted", "false");
+        audio.play().then(updateBtnState).catch(() => {});
       }
     });
+
+    updateBtnState();
   }
 
   setGlobalChrome();
