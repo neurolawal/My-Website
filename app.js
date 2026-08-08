@@ -736,10 +736,10 @@
       audio.loop = true;
       audio.autoplay = true;
       audio.preload = "auto";
-      audio.volume = 0.5;
+      audio.volume = 0.10;
       document.body.appendChild(audio);
     } else {
-      audio.volume = 0.5;
+      audio.volume = 0.10;
     }
 
     let toggleBtn = document.getElementById("audio-toggle-btn");
