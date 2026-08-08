@@ -207,14 +207,18 @@
     const isTouchDevice = window.matchMedia("(pointer: coarse)").matches || 'ontouchstart' in window;
 
     if (isTouchDevice) {
-      // On touch devices, keep the revealer lens permanently visible so it can be dragged around
+      // On touch devices, start the revealer lens at top-right (82%, 18%) directly over the hint badge
       isActive = true;
+      targetX = 82;
+      targetY = 18;
+      currentX = 82;
+      currentY = 18;
       targetSize = 28;
       currentSize = 28;
       heroContainer.classList.add("is-active", "is-touch");
       heroContainer.style.setProperty('--mask-size', `28vw`);
-      heroContainer.style.setProperty('--mouse-x', `50%`);
-      heroContainer.style.setProperty('--mouse-y', `50%`);
+      heroContainer.style.setProperty('--mouse-x', `82%`);
+      heroContainer.style.setProperty('--mouse-y', `18%`);
     }
 
     function paint() {
