@@ -203,23 +203,34 @@
     let targetSize = 0;
     let isActive = false;
 
+    // Detect if device supports touch input
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches || 'ontouchstart' in window;
+
+    if (isTouchDevice) {
+      // On touch devices, keep the revealer lens permanently visible so it can be dragged around
+      isActive = true;
+      targetSize = 28;
+      currentSize = 28;
+      heroContainer.classList.add("is-active", "is-touch");
+      heroContainer.style.setProperty('--mask-size', `28vw`);
+      heroContainer.style.setProperty('--mouse-x', `50%`);
+      heroContainer.style.setProperty('--mouse-y', `50%`);
+    }
+
     function paint() {
-      // Smooth interpolation (lerp) for fluid motion
-      currentX += (targetX - currentX) * 0.12;
-      currentY += (targetY - currentY) * 0.12;
-      currentSize += (targetSize - currentSize) * 0.12;
+      currentX += (targetX - currentX) * 0.14;
+      currentY += (targetY - currentY) * 0.14;
+      currentSize += (targetSize - currentSize) * 0.14;
 
       heroContainer.style.setProperty('--mouse-x', `${currentX}%`);
       heroContainer.style.setProperty('--mouse-y', `${currentY}%`);
       heroContainer.style.setProperty('--mask-size', `${currentSize}vw`);
 
-      // Keep animating if active or if variables haven't completely settled yet
-      if (isActive || Math.abs(targetX - currentX) > 0.1 || Math.abs(targetY - currentY) > 0.1 || Math.abs(targetSize - currentSize) > 0.05) {
+      if (isActive || Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05 || Math.abs(targetSize - currentSize) > 0.05) {
         rafId = window.requestAnimationFrame(paint);
       } else {
         rafId = 0;
-        // Snap explicitly to 0 when definitely stopped shrinking
-        if (!isActive) heroContainer.style.setProperty('--mask-size', `0vw`);
+        if (!isActive && !isTouchDevice) heroContainer.style.setProperty('--mask-size', `0vw`);
       }
     }
 
@@ -229,38 +240,57 @@
       }
     }
 
-    function updateMask(event) {
+    function updatePos(clientX, clientY) {
       const rect = heroContainer.getBoundingClientRect();
-      targetX = ((event.clientX - rect.left) / rect.width) * 100;
-      targetY = ((event.clientY - rect.top) / rect.height) * 100;
+      targetX = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+      targetY = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+      isActive = true;
+      if (isTouchDevice) targetSize = 28;
       queuePaint();
     }
 
+    // Touch Drag Handlers
+    heroContainer.addEventListener("touchstart", (e) => {
+      if (e.touches && e.touches[0]) {
+        updatePos(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    heroContainer.addEventListener("touchmove", (e) => {
+      if (e.touches && e.touches[0]) {
+        updatePos(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    // Pointer Handlers for Desktop Mouse
     heroContainer.addEventListener("pointerenter", (event) => {
+      if (event.pointerType === "touch") return;
       const rect = heroContainer.getBoundingClientRect();
-      // Snap position to exactly where the mouse enters to originate the bloom there
       currentX = targetX = ((event.clientX - rect.left) / rect.width) * 100;
       currentY = targetY = ((event.clientY - rect.top) / rect.height) * 100;
 
       isActive = true;
-      targetSize = 24; // Expanded blob size
+      targetSize = 24;
       heroContainer.classList.add("is-active");
       queuePaint();
     });
 
-    heroContainer.addEventListener("pointermove", updateMask);
+    heroContainer.addEventListener("pointermove", (event) => {
+      if (event.pointerType === "touch") return;
+      updatePos(event.clientX, event.clientY);
+    });
 
-    heroContainer.addEventListener("pointerleave", () => {
+    heroContainer.addEventListener("pointerleave", (event) => {
+      if (event.pointerType === "touch" || isTouchDevice) return;
       isActive = false;
-      targetSize = 0; // Shrink blob to 0
+      targetSize = 0;
       heroContainer.classList.remove("is-active");
       queuePaint();
     });
 
-    // Initialize CSS vars immediately
-    heroContainer.style.setProperty('--mouse-x', `50%`);
-    heroContainer.style.setProperty('--mouse-y', `50%`);
-    heroContainer.style.setProperty('--mask-size', `0vw`);
+    if (isTouchDevice) {
+      queuePaint();
+    }
   }
 
   function renderProjects() {
