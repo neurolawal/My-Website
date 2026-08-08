@@ -1523,9 +1523,13 @@ body[data-page="home"] .hero-bust {
     min-height: 0;
   }
 
-  .project-grid,
   .detail-related-grid {
     grid-template-columns: 1fr;
+  }
+
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem 0.85rem;
   }
 }
 
@@ -1655,9 +1659,9 @@ body[data-page="home"] .hero-bust {
 }
 
 .view-toggle-btn.active {
-  background: var(--surface-container-lowest);
+  background: #ffffff;
   color: var(--on-surface);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 /* Un-fused Grid (2 Columns with Row Dividers) */
