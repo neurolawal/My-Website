@@ -884,6 +884,7 @@ body[data-page="home"] .hero-bust {
     top: auto !important;
     transform: none !important;
     overflow: hidden !important;
+    touch-action: none !important;
     margin: 0.5rem auto 0.75rem auto !important;
     padding-bottom: 0 !important;
     display: flex !important;

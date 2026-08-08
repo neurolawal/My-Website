@@ -254,18 +254,20 @@
       queuePaint();
     }
 
-    // Touch Drag Handlers
+    // Touch Drag Handlers — prevents browser page scrolling during portrait dragging
     heroContainer.addEventListener("touchstart", (e) => {
+      if (e.cancelable) e.preventDefault();
       if (e.touches && e.touches[0]) {
         updatePos(e.touches[0].clientX, e.touches[0].clientY);
       }
-    }, { passive: true });
+    }, { passive: false });
 
     heroContainer.addEventListener("touchmove", (e) => {
+      if (e.cancelable) e.preventDefault();
       if (e.touches && e.touches[0]) {
         updatePos(e.touches[0].clientX, e.touches[0].clientY);
       }
-    }, { passive: true });
+    }, { passive: false });
 
     // Pointer Handlers for Desktop Mouse
     heroContainer.addEventListener("pointerenter", (event) => {
