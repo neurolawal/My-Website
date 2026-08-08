@@ -246,8 +246,9 @@
 
     function updatePos(clientX, clientY) {
       const rect = heroContainer.getBoundingClientRect();
-      targetX = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
-      targetY = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+      // Clamp coordinates firmly between 12% and 88% so revealer badge never overflows outer bounds
+      targetX = Math.max(12, Math.min(88, ((clientX - rect.left) / rect.width) * 100));
+      targetY = Math.max(12, Math.min(88, ((clientY - rect.top) / rect.height) * 100));
       isActive = true;
       if (isTouchDevice) targetSize = 28;
       queuePaint();
