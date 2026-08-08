@@ -1967,13 +1967,13 @@ body[data-page="home"] .hero-bust {
 
 .floating-audio-toggle .material-symbols-rounded,
 .floating-audio-toggle .ph {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   transition: opacity 0.25s ease, color 0.25s ease, transform 0.25s ease;
 }
 
 .floating-audio-toggle.is-muted .ph,
-.floating-audio-toggle .muted-clef {
-  opacity: 0.4;
+.floating-audio-toggle .muted-icon {
+  opacity: 0.35;
 }
 
 .floating-audio-toggle.is-playing .ph {

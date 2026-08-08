@@ -735,7 +735,6 @@
       audio.id = "site-bg-audio";
       audio.src = audioSrc;
       audio.loop = true;
-      audio.autoplay = true;
       audio.preload = "auto";
       audio.volume = 0.10;
       document.body.appendChild(audio);
@@ -748,9 +747,9 @@
       toggleBtn = document.createElement("button");
       toggleBtn.id = "audio-toggle-btn";
       toggleBtn.className = "floating-audio-toggle";
-      toggleBtn.setAttribute("aria-label", "Toggle background audio");
+      toggleBtn.setAttribute("aria-label", "Toggle background soundtrack");
       toggleBtn.setAttribute("title", "Pirates of the Caribbean Soundtrack");
-      toggleBtn.innerHTML = `<i class="ph ph-treble-clef"></i>`;
+      toggleBtn.innerHTML = `<i class="ph ph-music-notes"></i>`;
       document.body.appendChild(toggleBtn);
     }
 
@@ -759,16 +758,16 @@
       if (audio.paused || userHasMuted) {
         toggleBtn.classList.remove("is-playing");
         toggleBtn.classList.add("is-muted");
-        if (icon) icon.className = "ph ph-treble-clef muted-clef";
+        if (icon) icon.className = "ph ph-music-notes muted-icon";
       } else {
         toggleBtn.classList.add("is-playing");
         toggleBtn.classList.remove("is-muted");
-        if (icon) icon.className = "ph ph-treble-clef";
+        if (icon) icon.className = "ph ph-music-notes";
       }
     }
 
     function tryPlay() {
-      if (userHasMuted) return;
+      if (userHasMuted || document.hidden) return;
       if (audio.paused) {
         audio.play().then(() => {
           updateBtnState();
@@ -789,6 +788,24 @@
         window.addEventListener(evt, onUserInteraction, { passive: true });
       });
     }
+
+    // Immediately stop audio when tab is hidden, closed, or unloaded
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        audio.pause();
+        updateBtnState();
+      } else if (!userHasMuted) {
+        tryPlay();
+      }
+    });
+
+    window.addEventListener("pagehide", () => {
+      audio.pause();
+    });
+
+    window.addEventListener("beforeunload", () => {
+      audio.pause();
+    });
 
     toggleBtn.addEventListener("click", (e) => {
       e.stopPropagation();
