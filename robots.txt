@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://samuellawal.com/sitemap.xml
