@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://samuellawal.com/sitemap.xml
+Sitemap: https://www.samlawal.com/sitemap.xml
