@@ -416,6 +416,38 @@
     // Eliminated
   }
 
+  function parseFrontmatter(text) {
+    if (!text || typeof text !== "string") return { data: {}, content: "" };
+    const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+    if (!match) return { data: {}, content: text };
+
+    const rawYaml = match[1];
+    const content = match[2];
+    const data = {};
+
+    rawYaml.split("\n").forEach((line) => {
+      const parts = line.split(":");
+      if (parts.length >= 2) {
+        const key = parts[0].trim();
+        let value = parts.slice(1).join(":").trim();
+        if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+          value = value.slice(1, -1);
+        }
+        data[key] = value;
+      }
+    });
+
+    return { data, content };
+  }
+
+  function renderMarkdownContent(content) {
+    if (!content) return "";
+    if (typeof window.marked !== "undefined" && typeof window.marked.parse === "function") {
+      return window.marked.parse(content);
+    }
+    return `<p>${escapeHtml(content)}</p>`;
+  }
+
   function renderProjectDetail() {
     const project = bySlug(data.projects, params().get("slug"));
     const container = $("#project-detail");
@@ -424,38 +456,34 @@
       return;
     }
 
-    const relatedPosts = data.posts.filter((post) => post.relatedProjectSlugs.includes(project.slug));
+    const bodyHtml = renderMarkdownContent(project.body || project.content);
+    const relatedPosts = data.posts.filter((post) => post.relatedProjectSlugs && post.relatedProjectSlugs.includes(project.slug));
     container.innerHTML = `
       <section class="card detail-layout">
         <div class="detail-header">
-          <p class="eyebrow">${escapeHtml(project.type)}</p>
+          <p class="eyebrow">${escapeHtml(project.type || "Project")}</p>
           <h1>${escapeHtml(project.title)}</h1>
-          <p class="hero-summary">${escapeHtml(project.shortSummary)}</p>
+          <p class="hero-summary">${escapeHtml(project.shortSummary || project.summary || "")}</p>
           <div class="meta-row">
-            <span>${escapeHtml(project.status)}</span>
-            <span>${escapeHtml(project.year)}</span>
+            <span>${escapeHtml(project.status || "Active")}</span>
+            <span>${escapeHtml(project.year || "2026")}</span>
           </div>
-          <div class="pill-row">${renderPills(project.topics, true)}</div>
+          <div class="pill-row">${renderPills(project.topics || [], true)}</div>
         </div>
-        <div class="detail-body">${escapeHtml(project.body)}</div>
+        <div class="detail-body">${bodyHtml}</div>
         <div class="divider"></div>
-        <div class="meta-row">
-          <span>Roles: ${escapeHtml(project.roles.join(", "))}</span>
-          <span>Tools: ${escapeHtml(project.tools.join(", "))}</span>
-        </div>
-        <p><strong>Outcome:</strong> ${escapeHtml(project.outcome)}</p>
-        <div class="link-list">
-          ${project.links.map((link) => `<a class="text-link" href="${escapeHtml(link.href)}">${escapeHtml(link.label)}</a>`).join("")}
-        </div>
+        ${project.roles ? `<div class="meta-row"><span>Roles: ${escapeHtml(project.roles.join(", "))}</span><span>Tools: ${escapeHtml(project.tools ? project.tools.join(", ") : "")}</span></div>` : ""}
+        ${project.outcome ? `<p><strong>Outcome:</strong> ${escapeHtml(project.outcome)}</p>` : ""}
+        ${project.links ? `<div class="link-list">${project.links.map((link) => `<a class="text-link" href="${escapeHtml(link.href)}">${escapeHtml(link.label)}</a>`).join("")}</div>` : ""}
       </section>
       <section class="card detail-related">
         <h2>Related writing</h2>
         <div class="detail-related-grid">
           ${relatedPosts.length ? relatedPosts.map((post) => `
-            <a class="detail-related-card" href="post?slug=${escapeHtml(post.slug)}">
-              <p class="eyebrow">${escapeHtml(post.series)}</p>
+            <a class="detail-related-card" href="post.html?slug=${escapeHtml(post.slug)}">
+              <p class="eyebrow">${escapeHtml(post.series || "Essay")}</p>
               <h3>${escapeHtml(post.title)}</h3>
-              <p>${escapeHtml(post.excerpt)}</p>
+              <p>${escapeHtml(post.excerpt || post.summary || "")}</p>
             </a>
           `).join("") : `<div class="empty-state">No related writing linked yet.</div>`}
         </div>
@@ -471,29 +499,30 @@
       return;
     }
 
-    const relatedProjects = data.projects.filter((project) => post.relatedProjectSlugs.includes(project.slug));
+    const bodyHtml = renderMarkdownContent(post.body || post.content);
+    const relatedProjects = data.projects.filter((project) => post.relatedProjectSlugs && post.relatedProjectSlugs.includes(project.slug));
     container.innerHTML = `
       <section class="card detail-layout">
         <div class="detail-header">
-          <p class="eyebrow">${escapeHtml(post.series)}</p>
+          <p class="eyebrow">${escapeHtml(post.series || "Writing")}</p>
           <h1>${escapeHtml(post.title)}</h1>
-          <p class="hero-summary">${escapeHtml(post.excerpt)}</p>
+          <p class="hero-summary">${escapeHtml(post.excerpt || post.summary || "")}</p>
           <div class="meta-row">
-            <span>${escapeHtml(post.publishedDate)}</span>
-            <span>${escapeHtml(post.readingTime)}</span>
+            <span>${escapeHtml(post.publishedDate || post.date || "2026")}</span>
+            <span>${escapeHtml(post.readingTime || "3 min read")}</span>
           </div>
-          <div class="pill-row">${renderPills(post.topics, true)}</div>
+          <div class="pill-row">${renderPills(post.topics || [], true)}</div>
         </div>
-        <div class="detail-body">${escapeHtml(post.body)}</div>
+        <div class="detail-body">${bodyHtml}</div>
       </section>
       <section class="card detail-related">
         <h2>Related work</h2>
         <div class="detail-related-grid">
           ${relatedProjects.length ? relatedProjects.map((project) => `
-            <a class="detail-related-card" href="project?slug=${escapeHtml(project.slug)}">
-              <p class="eyebrow">${escapeHtml(project.type)}</p>
+            <a class="detail-related-card" href="project.html?slug=${escapeHtml(project.slug)}">
+              <p class="eyebrow">${escapeHtml(project.type || "Project")}</p>
               <h3>${escapeHtml(project.title)}</h3>
-              <p>${escapeHtml(project.shortSummary)}</p>
+              <p>${escapeHtml(project.shortSummary || project.summary || "")}</p>
             </a>
           `).join("") : `<div class="empty-state">No related projects linked yet.</div>`}
         </div>
