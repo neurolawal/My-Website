@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /my-dearly-beloved
+Disallow: /my-dearly-beloved.html
+Disallow: /dearly-beloved
 
 Sitemap: https://www.samlawal.com/sitemap.xml

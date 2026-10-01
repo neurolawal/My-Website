@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dearly Beloved</title>
+  <meta name="description" content="My Dearly Beloved — A letter for Keziah.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://www.samlawal.com/my-dearly-beloved.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Dedicated bespoke styling for My Dearly Beloved */
+    body[data-page="beloved"] {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 80px, rgba(238, 222, 208, 0.45), transparent 70%),
+        radial-gradient(circle at 15% 30%, rgba(245, 235, 225, 0.4), transparent 45%),
+        linear-gradient(180deg, #fdfbf9 0%, #f9f6f1 40%, #f4eee7 100%);
+      color: #24211e;
+      overflow-x: hidden;
+      padding-top: 84px;
+    }
+
+    .beloved-shell {
+      width: min(calc(100% - 2rem), 760px);
+      margin: 0 auto;
+      padding: 1.5rem 0 5rem;
+    }
+
+    .beloved-card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(224, 214, 202, 0.75);
+      border-radius: 18px;
+      padding: clamp(2.5rem, 6.5vw, 4.8rem) clamp(1.8rem, 6.5vw, 4.2rem);
+      box-shadow:
+        0 24px 60px -15px rgba(50, 40, 30, 0.07),
+        0 4px 16px -4px rgba(50, 40, 30, 0.03),
+        0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+      animation: belovedFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes belovedFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .beloved-header {
+      text-align: center;
+      margin-bottom: 2.8rem;
+    }
+
+    .beloved-eyebrow-row {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: #928476;
+      margin-bottom: 1.1rem;
+    }
+
+    .beloved-eyebrow-sep {
+      opacity: 0.4;
+      font-weight: 300;
+    }
+
+    .beloved-title {
+      font-family: "Newsreader", "Instrument Serif", Georgia, serif;
+      font-size: clamp(2.75rem, 6.2vw, 4.2rem);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.12;
+      color: #1a1714;
+      letter-spacing: -0.025em;
+      margin: 0;
+    }
+
+    .beloved-ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.1rem;
+      margin: 1.8rem auto 0;
+      max-width: 220px;
+    }
+
+    .ornament-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(186, 158, 130, 0.5), transparent);
+    }
+
+    .ornament-glyph {
+      font-size: 0.85rem;
+      color: #b58d68;
+      opacity: 0.85;
+      transform: scale(1.1);
+    }
+
+    .beloved-prose {
+      font-family: "Newsreader", Georgia, serif;
+      font-size: clamp(1.14rem, 1.38vw, 1.26rem);
+      line-height: 1.95;
+      font-weight: 380;
+      color: #2b2723;
+      letter-spacing: -0.003em;
+    }
+
+    .beloved-prose p {
+      margin: 0 0 1.9rem 0;
+    }
+
+    .lead-paragraph {
+      position: relative;
+    }
+
+    .drop-letter {
+      float: left;
+      font-family: "Instrument Serif", "Newsreader", Georgia, serif;
+      font-size: clamp(4.4rem, 7.5vw, 5.2rem);
+      font-style: italic;
+      line-height: 0.78;
+      padding: 0.28rem 0.75rem 0.1rem 0;
+      color: #1a1714;
+      font-weight: 400;
+    }
+
+    .beloved-accent {
+      font-style: italic;
+      color: #8c532b;
+      font-weight: 450;
+    }
+
+    .beloved-stanza {
+      margin: 3.2rem 0;
+      padding: 2.2rem clamp(1.6rem, 4vw, 2.5rem);
+      background: linear-gradient(135deg, rgba(247, 241, 233, 0.75) 0%, rgba(242, 234, 224, 0.55) 100%);
+      border-left: 2px solid #b58d68;
+      border-radius: 0 14px 14px 0;
+      box-shadow: 0 4px 20px -6px rgba(181, 141, 104, 0.08);
+    }
+
+    .stanza-intro {
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-style: normal;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #8f7d6d;
+      margin: 0 0 1rem 0 !important;
+    }
+
+    .stanza-line {
+      font-family: "Newsreader", Georgia, serif;
+      font-style: italic;
+      font-size: clamp(1.15rem, 1.35vw, 1.28rem);
+      line-height: 1.85;
+      color: #2e2924;
+      margin: 0 0 0.55rem 0 !important;
+    }
+
+    .stanza-line.stanza-highlight {
+      color: #8c532b;
+      font-weight: 480;
+    }
+
+    .stanza-line.stanza-pledge {
+      color: #1a1714;
+      margin-bottom: 0 !important;
+    }
+
+    .beloved-closer {
+      margin-top: 3.2rem;
+      padding-top: 2.2rem;
+      border-top: 1px solid rgba(224, 214, 202, 0.65);
+    }
+
+    .closer-toast {
+      font-family: "Newsreader", Georgia, serif;
+      font-size: clamp(1.22rem, 1.45vw, 1.35rem);
+      font-style: italic;
+      font-weight: 450;
+      color: #1a1714;
+      margin-bottom: 1.8rem !important;
+      text-align: left;
+    }
+
+    .closer-signoff {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.25rem;
+    }
+
+    .signoff-hand {
+      font-family: "Newsreader", Georgia, serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: #8f7d6d;
+    }
+
+    .signoff-signature {
+      font-family: "Instrument Serif", Georgia, serif;
+      font-size: clamp(2.4rem, 4vw, 3rem);
+      font-style: italic;
+      color: #1a1714;
+      line-height: 1.05;
+      margin-top: 0.25rem;
+    }
+
+    .beloved-footer {
+      text-align: center;
+      padding: 3rem 0 1rem;
+      color: #a49688;
+    }
+
+    .footer-mark {
+      font-size: 0.9rem;
+      color: #b58d68;
+      opacity: 0.75;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-micro {
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin: 0;
+      opacity: 0.7;
+    }
+
+    /* Dark Mode Theme */
+    @media (prefers-color-scheme: dark) {
+      body[data-page="beloved"] {
+        background:
+          radial-gradient(ellipse 70% 50% at 50% 80px, rgba(55, 42, 32, 0.35), transparent 70%),
+          radial-gradient(circle at 15% 30%, rgba(45, 35, 28, 0.3), transparent 45%),
+          linear-gradient(180deg, #131211 0%, #161513 40%, #11100f 100%);
+        color: #ede7df;
+      }
+
+      .beloved-card {
+        background: rgba(26, 23, 21, 0.85);
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow:
+          0 30px 70px -15px rgba(0, 0, 0, 0.55),
+          0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+      }
+
+      .beloved-title {
+        color: #fbf7f1;
+      }
+
+      .beloved-eyebrow-row {
+        color: #a39587;
+      }
+
+      .beloved-prose {
+        color: #e2dbd1;
+      }
+
+      .drop-letter {
+        color: #fbf7f1;
+      }
+
+      .beloved-accent {
+        color: #d89f72;
+      }
+
+      .beloved-stanza {
+        background: linear-gradient(135deg, rgba(34, 30, 27, 0.8) 0%, rgba(29, 25, 22, 0.6) 100%);
+        border-left-color: #d89f72;
+        box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.3);
+      }
+
+      .stanza-intro {
+        color: #a39587;
+      }
+
+      .stanza-line {
+        color: #e2dbd1;
+      }
+
+      .stanza-line.stanza-highlight {
+        color: #d89f72;
+      }
+
+      .stanza-line.stanza-pledge {
+        color: #fbf7f1;
+      }
+
+      .beloved-closer {
+        border-top-color: rgba(255, 255, 255, 0.08);
+      }
+
+      .closer-toast {
+        color: #fbf7f1;
+      }
+
+      .signoff-hand {
+        color: #a39587;
+      }
+
+      .signoff-signature {
+        color: #fbf7f1;
+      }
+
+      .beloved-footer {
+        color: #7b7064;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .beloved-shell {
+        width: min(calc(100% - 1.25rem), 760px);
+        padding-top: 0.5rem;
+      }
+
+      .beloved-card {
+        padding: 2.2rem 1.4rem;
+        border-radius: 14px;
+      }
+
+      .beloved-stanza {
+        padding: 1.5rem 1.2rem;
+        margin: 2.4rem 0;
+      }
+
+      .beloved-prose {
+        font-size: 1.12rem;
+        line-height: 1.85;
+      }
+    }
+  </style>
+</head>
+<body data-page="beloved">
+  <nav class="global-floating-nav" aria-label="Primary navigation">
+    <div class="nav-mobile-header">
+      <a href="index.html" class="nav-logo" aria-label="Home"></a>
+      <button class="nav-menu-toggle" id="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+        <i class="ph ph-list"></i>
+      </button>
+    </div>
+    <div class="nav-links-container" id="mobile-menu-dropdown">
+      <a href="index.html" class="nav-link" data-nav="home"><i class="ph ph-house"></i>Home</a>
+      <a href="projects.html" class="nav-link" data-nav="projects"><i class="ph ph-folder-open"></i>Projects</a>
+      <a href="writing.html" class="nav-link" data-nav="writing"><i class="ph ph-article"></i>Writing</a>
+      <a href="art.html" class="nav-link" data-nav="art"><i class="ph ph-palette"></i>Art</a>
+      <a href="about.html" class="nav-link" data-nav="about"><i class="ph ph-user"></i>Formal me</a>
+    </div>
+  </nav>
+
+  <div class="site-shell beloved-shell">
+    <main class="beloved-main">
+      <article class="beloved-card">
+        <header class="beloved-header">
+          <div class="beloved-eyebrow-row">
+            <span class="beloved-eyebrow">For Keziah</span>
+            <span class="beloved-eyebrow-sep">/</span>
+            <span class="beloved-date">One Month</span>
+          </div>
+          <h1 class="beloved-title">My Dearly Beloved</h1>
+          <div class="beloved-ornament">
+            <span class="ornament-line"></span>
+            <span class="ornament-glyph">✦</span>
+            <span class="ornament-line"></span>
+          </div>
+        </header>
+
+        <div class="beloved-prose">
+          <p class="lead-paragraph">
+            <span class="drop-letter">I</span> will like to tell you a story Keziah, of a boy, bear with me, as I can promise a sort of happy ending. I know I recount the tale of our meeting enough times to make uncomfortable, and it comes to mind again tonight, I recall the green-behind-the-ears, fresh out-of-trouble 17 year old, that left his house at the other end of Kwara State that day, knowing that he would rather be anywhere but where he was, that he was certainly scared of the the place ahead, just not that he will meet a miracle.
+          </p>
+
+          <p>
+            I genuinely cannot recall what I said or what led to what, hell &mdash; that whole day always plays out in three flashes in my moments of recollection. My consciousness of how rumpled my short sleeved brown native dress was. Seeing a dashing young lady just after I scaled the last step of the stairs. Some apparition of Idris mouthing some things I definitely cannot recall. All these, motifs to your <em class="beloved-accent">&ldquo;I don&rsquo;t knowwww&rdquo;</em> &mdash; the highlight of that day, the day I met a miracle. A boy met a miracle, and began to hope on his becoming a man, one worthy of such wonder.
+          </p>
+
+          <p>
+            In the words of Apostle Paul, my dearly beloved, I would have you know that I do not take everything this is, as anything other than the privilege that it is. Knowing you early enough to grow up together and with all my hope, well enough to grow old together, this is my living- manifest. I am ever bent on living out an ideal christian life of love through you (which I must confess, was one experience that solidified the logic of my emotions for you). To seek your becoming. To have you happy. To keep you in my thoughts. To be sensitive to your needs. To believe your entirety. I find you becoming the perfect neighbor for me.
+          </p>
+
+          <p>
+            It would be disingenuous of me not to acknowledge my initial concerns for the possibility of a miss. From the kindlings of my love for you which the years past were, to the past few months of emotion becoming decision, they were all spotted with that concern. However, there always was a light of possibility behind this concern, the possibility of a life where I am a comforting thought in your mind, this makes every concern pale. That is what you ever are to me, a positive.
+          </p>
+
+          <p>
+            I am utterly besotted by your being and will continue to be (I like it here :)). This feeling is one I will constantly communicate, I will always let you in on the contents of my yearning, my undying want of you. One notion I came across that aptly captures my person as It concerns you is how I selfishly want to be the only one who can see you the way I do.
+          </p>
+
+          <div class="beloved-stanza">
+            <p class="stanza-intro">To wrap this up,</p>
+            <p class="stanza-line">In the &ldquo;then&rdquo;, you were a desire.</p>
+            <p class="stanza-line">In the &ldquo;then&rdquo; that came after that, you became my muse.</p>
+            <p class="stanza-line stanza-highlight">In the &ldquo;now&rdquo;, you are my beloved.</p>
+            <p class="stanza-line stanza-pledge">In the &ldquo;thens&rdquo; that will come after this, you will continue to be and have my devotion.</p>
+          </div>
+
+          <p>
+            I believe I am I your debt, I owe you the world, and this is a debt I want to begin to, then continue to pay for as long as you will have me. I wish I could have done the whole asking out in person, take this as a token of my yearning for you.
+          </p>
+
+          <div class="beloved-closer">
+            <p class="closer-toast">Here is to one month, and one more, always.</p>
+            <div class="closer-signoff">
+              <span class="signoff-hand">With all my heart &amp; devotion,</span>
+              <span class="signoff-signature">Samuel</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <footer class="beloved-footer">
+      <div class="footer-mark">✦</div>
+      <p class="footer-micro">Written with care · Always</p>
+    </footer>
+  </div>
+
+  <script src="site-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
