@@ -755,9 +755,14 @@
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', initDynamicFavicon);
 
   function initBackgroundAudio() {
-    const audioSrc = "assets/Pirates Of The Caribbean - Main Theme - He's A Pirate.mp3";
+    const isCustomAudio = Boolean(document.body.dataset.audioSrc);
+    const audioSrc = document.body.dataset.audioSrc || "assets/Pirates Of The Caribbean - Main Theme - He's A Pirate.mp3";
+    const audioTitle = document.body.dataset.audioTitle || "Pirates of the Caribbean Soundtrack";
+    const defaultVolume = parseFloat(document.body.dataset.audioVolume) || (isCustomAudio ? 0.25 : 0.10);
+    const muteKey = isCustomAudio ? "belovedAudioMuted" : "siteAudioMuted";
+
     let audio = document.getElementById("site-bg-audio");
-    let userHasMuted = localStorage.getItem("siteAudioMuted") === "true";
+    let userHasMuted = localStorage.getItem(muteKey) === "true";
 
     if (!audio) {
       audio = document.createElement("audio");
@@ -765,10 +770,13 @@
       audio.src = audioSrc;
       audio.loop = true;
       audio.preload = "auto";
-      audio.volume = 0.10;
+      audio.volume = defaultVolume;
       document.body.appendChild(audio);
     } else {
-      audio.volume = 0.10;
+      if (audio.getAttribute("src") !== audioSrc) {
+        audio.src = audioSrc;
+      }
+      audio.volume = defaultVolume;
     }
 
     let toggleBtn = document.getElementById("audio-toggle-btn");
@@ -777,14 +785,18 @@
       toggleBtn.id = "audio-toggle-btn";
       toggleBtn.className = "floating-audio-toggle";
       toggleBtn.setAttribute("aria-label", "Toggle background soundtrack");
-      toggleBtn.setAttribute("title", "Pirates of the Caribbean Soundtrack");
+      toggleBtn.setAttribute("title", audioTitle);
       toggleBtn.innerHTML = `<i class="ph ph-music-notes"></i>`;
       document.body.appendChild(toggleBtn);
+    } else {
+      toggleBtn.setAttribute("title", audioTitle);
     }
 
     function updateBtnState() {
       const icon = toggleBtn.querySelector("i");
-      if (audio.paused || userHasMuted) {
+      const isMutedOrPaused = audio.paused || userHasMuted;
+
+      if (isMutedOrPaused) {
         toggleBtn.classList.remove("is-playing");
         toggleBtn.classList.add("is-muted");
         if (icon) icon.className = "ph ph-music-notes muted-icon";
@@ -792,6 +804,24 @@
         toggleBtn.classList.add("is-playing");
         toggleBtn.classList.remove("is-muted");
         if (icon) icon.className = "ph ph-music-notes";
+      }
+
+      // Sync custom page pill if present
+      const pill = document.getElementById("beloved-music-pill");
+      const pillStatus = document.getElementById("music-pill-status");
+      const pillIcon = document.getElementById("music-pill-icon");
+      if (pill && pillStatus) {
+        if (isMutedOrPaused) {
+          pill.classList.remove("is-playing");
+          pill.classList.add("is-paused");
+          pillStatus.textContent = "Paused";
+          if (pillIcon) pillIcon.className = "ph ph-play-circle";
+        } else {
+          pill.classList.add("is-playing");
+          pill.classList.remove("is-paused");
+          pillStatus.textContent = "Playing";
+          if (pillIcon) pillIcon.className = "ph ph-waveform";
+        }
       }
     }
 
@@ -836,19 +866,26 @@
       audio.pause();
     });
 
-    toggleBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
+    function togglePlayback(e) {
+      if (e) e.stopPropagation();
       if (!audio.paused && !userHasMuted) {
         audio.pause();
         userHasMuted = true;
-        localStorage.setItem("siteAudioMuted", "true");
+        localStorage.setItem(muteKey, "true");
         updateBtnState();
       } else {
         userHasMuted = false;
-        localStorage.setItem("siteAudioMuted", "false");
+        localStorage.setItem(muteKey, "false");
         audio.play().then(updateBtnState).catch(() => {});
       }
-    });
+    }
+
+    toggleBtn.addEventListener("click", togglePlayback);
+
+    const belovedPillBtn = document.getElementById("beloved-music-btn");
+    if (belovedPillBtn) {
+      belovedPillBtn.addEventListener("click", togglePlayback);
+    }
 
     updateBtnState();
   }

@@ -677,9 +677,86 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* Music Player Pill */
+    .beloved-music-pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1.25rem 0 0.4rem;
+    }
+
+    .music-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      background: rgba(181, 141, 104, 0.12);
+      border: 1px solid rgba(181, 141, 104, 0.35);
+      border-radius: 100px;
+      padding: 0.45rem 1.1rem;
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #7a4f32;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .music-pill-btn:hover {
+      background: rgba(181, 141, 104, 0.22);
+      border-color: rgba(181, 141, 104, 0.55);
+      transform: translateY(-1px);
+    }
+
+    .music-pill-btn i {
+      font-size: 1rem;
+      color: #b58d68;
+      transition: transform 0.2s ease;
+    }
+
+    .music-pill-status {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 0.15rem 0.5rem;
+      border-radius: 100px;
+      background: rgba(181, 141, 104, 0.18);
+      color: #8c532b;
+      font-weight: 600;
+    }
+
+    .beloved-music-pill.is-paused .music-pill-btn {
+      opacity: 0.75;
+      background: rgba(181, 141, 104, 0.08);
+    }
+
+    .beloved-music-pill.is-paused .music-pill-status {
+      background: rgba(140, 130, 120, 0.15);
+      color: #8c7e71;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .music-pill-btn {
+        background: rgba(216, 159, 114, 0.12);
+        border-color: rgba(216, 159, 114, 0.28);
+        color: #ede7df;
+      }
+      .music-pill-btn:hover {
+        background: rgba(216, 159, 114, 0.2);
+        border-color: rgba(216, 159, 114, 0.45);
+      }
+      .music-pill-status {
+        background: rgba(216, 159, 114, 0.2);
+        color: #d89f72;
+      }
+      .beloved-music-pill.is-paused .music-pill-status {
+        background: rgba(255, 255, 255, 0.08);
+        color: #a39587;
+      }
+    }
   </style>
 </head>
-<body data-page="beloved">
+<body data-page="beloved" data-audio-src="assets/we (us) - Jimmy Clifton.mp3" data-audio-title="we (us) — Jimmy Clifton" data-audio-volume="0.25">
   <nav class="global-floating-nav" aria-label="Primary navigation">
     <div class="nav-mobile-header">
       <a href="index.html" class="nav-logo" aria-label="Home"></a>
@@ -706,6 +783,13 @@
             <span class="beloved-date">One Month</span>
           </div>
           <h1 class="beloved-title">My Dearly Beloved</h1>
+          <div class="beloved-music-pill" id="beloved-music-pill">
+            <button class="music-pill-btn" id="beloved-music-btn" type="button" aria-label="Play or pause soundtrack">
+              <i class="ph ph-waveform" id="music-pill-icon"></i>
+              <span class="music-pill-label">we (us) &mdash; Jimmy Clifton</span>
+              <span class="music-pill-status" id="music-pill-status">Playing</span>
+            </button>
+          </div>
           <div class="beloved-ornament">
             <span class="ornament-line"></span>
             <span class="ornament-glyph">✦</span>
