@@ -5,7 +5,7 @@ date: "2026-10-02"
 readingTime: "5 min read"
 series: "Letters"
 unlisted: true
-summary: "A story of a boy, a miracle, and a devotion that began one month ago and continues always."
+summary: "Hey Babe"
 ---
 
 # My Dearly Beloved
