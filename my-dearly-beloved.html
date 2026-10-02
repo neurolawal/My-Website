@@ -9,7 +9,7 @@
   <link rel="canonical" href="https://www.samlawal.com/my-dearly-beloved.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <link rel="stylesheet" href="styles.css">
@@ -143,6 +143,12 @@
       font-weight: 400;
     }
 
+    .wink-accent {
+      font-style: italic;
+      color: #8c532b;
+      opacity: 0.85;
+    }
+
     .beloved-accent {
       font-style: italic;
       color: #8c532b;
@@ -150,7 +156,7 @@
     }
 
     .beloved-stanza {
-      margin: 3.2rem 0;
+      margin: 3.2rem 0 2.4rem;
       padding: 2.2rem clamp(1.6rem, 4vw, 2.5rem);
       background: linear-gradient(135deg, rgba(247, 241, 233, 0.75) 0%, rgba(242, 234, 224, 0.55) 100%);
       border-left: 2px solid #b58d68;
@@ -186,6 +192,18 @@
     .stanza-line.stanza-pledge {
       color: #1a1714;
       margin-bottom: 0 !important;
+    }
+
+    .love-confession {
+      font-size: clamp(1.16rem, 1.4vw, 1.28rem);
+      line-height: 1.95;
+      color: #2b2723;
+    }
+
+    .heart-declaration {
+      color: #8c532b;
+      font-weight: 600;
+      letter-spacing: -0.01em;
     }
 
     .beloved-closer {
@@ -225,6 +243,244 @@
       color: #1a1714;
       line-height: 1.05;
       margin-top: 0.25rem;
+    }
+
+    /* --- Interactive Notes & Reflections Section --- */
+    .beloved-notes-section {
+      margin-top: 3.5rem;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(224, 214, 202, 0.7);
+      border-radius: 16px;
+      padding: clamp(2rem, 5vw, 3.2rem);
+      box-shadow: 0 16px 40px -12px rgba(50, 40, 30, 0.05);
+      animation: belovedFadeIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .notes-header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .notes-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #b58d68;
+      margin-bottom: 0.6rem;
+    }
+
+    .notes-title {
+      font-family: "Newsreader", "Instrument Serif", Georgia, serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      font-style: italic;
+      font-weight: 400;
+      color: #1a1714;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .notes-subtitle {
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-size: 0.9rem;
+      color: #8c7e71;
+      margin: 0 auto;
+      max-width: 480px;
+      line-height: 1.5;
+    }
+
+    .notes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .notes-empty-state {
+      text-align: center;
+      padding: 2rem 1rem;
+      border: 1px dashed rgba(224, 214, 202, 0.8);
+      border-radius: 10px;
+      color: #9c8e82;
+      font-family: "Newsreader", Georgia, serif;
+      font-style: italic;
+      font-size: 1.05rem;
+    }
+
+    .note-card {
+      position: relative;
+      background: #faf7f2;
+      border: 1px solid rgba(224, 214, 202, 0.65);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .note-card:hover {
+      box-shadow: 0 6px 20px -8px rgba(50, 40, 30, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .note-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .note-author-pill {
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 0.2rem 0.65rem;
+      border-radius: 100px;
+      background: rgba(181, 141, 104, 0.14);
+      color: #8c532b;
+    }
+
+    .note-author-pill.author-keziah {
+      background: rgba(220, 160, 150, 0.2);
+      color: #9e4738;
+    }
+
+    .note-author-pill.author-samuel {
+      background: rgba(181, 141, 104, 0.18);
+      color: #7a4f32;
+    }
+
+    .note-date {
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-size: 0.75rem;
+      color: #9c8e82;
+    }
+
+    .note-content {
+      font-family: "Newsreader", Georgia, serif;
+      font-size: 1.08rem;
+      line-height: 1.7;
+      color: #2b2723;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .note-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .note-delete-btn {
+      background: transparent;
+      border: none;
+      color: #a89a8e;
+      cursor: pointer;
+      padding: 0.3rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      line-height: 1;
+      opacity: 0.6;
+      transition: color 0.2s, opacity 0.2s;
+    }
+
+    .note-delete-btn:hover {
+      color: #b84a39;
+      opacity: 1;
+    }
+
+    .notes-form {
+      background: #faf8f5;
+      border: 1px solid rgba(224, 214, 202, 0.75);
+      border-radius: 12px;
+      padding: 1.6rem clamp(1.2rem, 3vw, 1.8rem);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group label {
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-size: 0.74rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #8c7e71;
+    }
+
+    .note-input {
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-size: 0.92rem;
+      padding: 0.65rem 0.85rem;
+      background: #ffffff;
+      border: 1px solid rgba(224, 214, 202, 0.9);
+      border-radius: 8px;
+      color: #24211e;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .note-input:focus {
+      outline: none;
+      border-color: #b58d68;
+      box-shadow: 0 0 0 3px rgba(181, 141, 104, 0.15);
+    }
+
+    .note-textarea {
+      font-family: "Newsreader", Georgia, serif;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      resize: vertical;
+      min-height: 84px;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.1rem;
+    }
+
+    .note-submit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: #1a1714;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.4rem;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .note-submit-btn:hover {
+      background: #8c532b;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px -4px rgba(140, 83, 43, 0.35);
+    }
+
+    .note-submit-btn i {
+      font-size: 1rem;
+      color: #e5989b;
     }
 
     .beloved-footer {
@@ -283,6 +539,10 @@
         color: #fbf7f1;
       }
 
+      .wink-accent {
+        color: #d89f72;
+      }
+
       .beloved-accent {
         color: #d89f72;
       }
@@ -309,6 +569,14 @@
         color: #fbf7f1;
       }
 
+      .love-confession {
+        color: #e2dbd1;
+      }
+
+      .heart-declaration {
+        color: #d89f72;
+      }
+
       .beloved-closer {
         border-top-color: rgba(255, 255, 255, 0.08);
       }
@@ -323,6 +591,60 @@
 
       .signoff-signature {
         color: #fbf7f1;
+      }
+
+      /* Dark mode notes section */
+      .beloved-notes-section {
+        background: rgba(26, 23, 21, 0.85);
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.55);
+      }
+
+      .notes-title {
+        color: #fbf7f1;
+      }
+
+      .notes-subtitle {
+        color: #a39587;
+      }
+
+      .note-card {
+        background: rgba(34, 30, 27, 0.7);
+        border-color: rgba(255, 255, 255, 0.07);
+      }
+
+      .note-content {
+        color: #e2dbd1;
+      }
+
+      .notes-empty-state {
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #8c7e71;
+      }
+
+      .notes-form {
+        background: rgba(34, 30, 27, 0.5);
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+
+      .note-input {
+        background: rgba(20, 18, 16, 0.8);
+        border-color: rgba(255, 255, 255, 0.12);
+        color: #ede7df;
+      }
+
+      .note-input:focus {
+        border-color: #d89f72;
+        box-shadow: 0 0 0 3px rgba(216, 159, 114, 0.18);
+      }
+
+      .note-submit-btn {
+        background: #d89f72;
+        color: #1a1714;
+      }
+
+      .note-submit-btn:hover {
+        background: #fbf7f1;
       }
 
       .beloved-footer {
@@ -343,12 +665,16 @@
 
       .beloved-stanza {
         padding: 1.5rem 1.2rem;
-        margin: 2.4rem 0;
+        margin: 2.4rem 0 1.8rem;
       }
 
       .beloved-prose {
         font-size: 1.12rem;
         line-height: 1.85;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -389,23 +715,27 @@
 
         <div class="beloved-prose">
           <p class="lead-paragraph">
-            <span class="drop-letter">I</span> will like to tell you a story Keziah, of a boy, bear with me, as I can promise a sort of happy ending. I know I recount the tale of our meeting enough times to make uncomfortable, and it comes to mind again tonight, I recall the green-behind-the-ears, fresh out-of-trouble 17 year old, that left his house at the other end of Kwara State that day, knowing that he would rather be anywhere but where he was, that he was certainly scared of the the place ahead, just not that he will meet a miracle.
+            <span class="drop-letter">I</span> will like to tell you a story Keziah, of a boy, and bear with me, as I can promise a sort of happy ending. I recount the tale of our meeting enough times to make uncomfortable, I know, and it comes to mind again tonight as I recall the green-behind-the-ears, fresh out-of-trouble, relatively thoughtless 17 year old, that left his house at the other end of Kwara State that day. I also can recall that he knew he would rather be anywhere but where he was at the time, he knew that he was certainly scared of the the place ahead, he just did not know that he will meet a miracle.
           </p>
 
           <p>
-            I genuinely cannot recall what I said or what led to what, hell &mdash; that whole day always plays out in three flashes in my moments of recollection. My consciousness of how rumpled my short sleeved brown native dress was. Seeing a dashing young lady just after I scaled the last step of the stairs. Some apparition of Idris mouthing some things I definitely cannot recall. All these, motifs to your <em class="beloved-accent">&ldquo;I don&rsquo;t knowwww&rdquo;</em> &mdash; the highlight of that day, the day I met a miracle. A boy met a miracle, and began to hope on his becoming a man, one worthy of such wonder.
+            I genuinely cannot recall what I said or what led to what, hell, that whole day always plays out as three flashes in my moments of recollection. There&rsquo;s my consciousness of how rumpled my short sleeved brown native clothes were. Then me seeing a dashing young lady <span class="wink-accent">(wink, wink)</span> just after I scaled the last step of the stairs. And finally some apparition of Idris mouthing some things I definitely cannot recall. All these, remain motifs to your <em class="beloved-accent">&ldquo;I don&rsquo;t knowwww&rdquo;</em>; the highlight of that day, the day I met a miracle. A boy met a miracle, and began to hope on his becoming a man, one worthy of such wonder.
           </p>
 
           <p>
-            In the words of Apostle Paul, my dearly beloved, I would have you know that I do not take everything this is, as anything other than the privilege that it is. Knowing you early enough to grow up together and with all my hope, well enough to grow old together, this is my living- manifest. I am ever bent on living out an ideal christian life of love through you (which I must confess, was one experience that solidified the logic of my emotions for you). To seek your becoming. To have you happy. To keep you in my thoughts. To be sensitive to your needs. To believe your entirety. I find you becoming the perfect neighbor for me.
+            In the words of Apostle Paul, my dearly beloved, I would have you know that I do not take everything this is, as anything other than the privilege that it is. This is me knowing you early enough to grow up together and with all my hope, well enough to grow old together, this is my dream :&mdash; manifest.
           </p>
 
           <p>
-            It would be disingenuous of me not to acknowledge my initial concerns for the possibility of a miss. From the kindlings of my love for you which the years past were, to the past few months of emotion becoming decision, they were all spotted with that concern. However, there always was a light of possibility behind this concern, the possibility of a life where I am a comforting thought in your mind, this makes every concern pale. That is what you ever are to me, a positive.
+            I find myself living out an ideal christian life of love through you (which I must confess, was one experience that solidified the logic of my emotions for you) and more of that, I want to do. To seek your becoming. To have you happy. To keep you in my thoughts. To be sensitive to your needs. To believe your entirety. I find you becoming the perfect neighbor for me.
           </p>
 
           <p>
-            I am utterly besotted by your being and will continue to be (I like it here :)). This feeling is one I will constantly communicate, I will always let you in on the contents of my yearning, my undying want of you. One notion I came across that aptly captures my person as It concerns you is how I selfishly want to be the only one who can see you the way I do.
+            Even when I try to quieten my heart and look at us rationally, I find you worth everything I have on the table, everything I have to offer; and then some. I&rsquo;ll use this to quickly acknowledge my initial concerns about the possibility of a miss, from the kindlings of my love for you which the years past were, to these past few months of emotions becoming a decision, they were all spotted with those concerns. However, there always was a light of possibility present, the possibility of an existence where I am a peaceful part of your life, a possibility that pales all concerns. That is what this feels like, and what I pray you ever are to me, an overwhelming pull in the right direction, a pull I&rsquo;ll always oblige.
+          </p>
+
+          <p>
+            I am utterly besotted by your being and will continue to be (I like it here :)). This feeling is one I want to continually stoke and constantly communicate. I will always let you in on the contents of my yearning, my undying want of you. One notion I came across that aptly captures my person as It concerns you is how I selfishly want to be the only one who can see you the way I do.
           </p>
 
           <div class="beloved-stanza">
@@ -416,8 +746,12 @@
             <p class="stanza-line stanza-pledge">In the &ldquo;thens&rdquo; that will come after this, you will continue to be and have my devotion.</p>
           </div>
 
+          <p class="love-confession">
+            I believe I am I your debt, I owe you the world, and this is a debt I want to begin to, then continue to pay for as long as you will have me. <strong class="heart-declaration">With all my heart, I love you.</strong>
+          </p>
+
           <p>
-            I believe I am I your debt, I owe you the world, and this is a debt I want to begin to, then continue to pay for as long as you will have me. I wish I could have done the whole asking out in person, take this as a token of my yearning for you.
+            I wish I could have done the asking out in person, please take this as a token of my yearning for you.
           </p>
 
           <div class="beloved-closer">
@@ -429,6 +763,44 @@
           </div>
         </div>
       </article>
+
+      <!-- Interactive Comments & Reflections Section -->
+      <section class="beloved-notes-section" id="notes-section" aria-label="Notes and reflections">
+        <div class="notes-header">
+          <div class="notes-badge">✦ Little Corner</div>
+          <h2 class="notes-title">Notes &amp; Reflections</h2>
+          <p class="notes-subtitle">A quiet space to leave comments, memories, or reflections as we look back over time.</p>
+        </div>
+
+        <div class="notes-list" id="notes-list"></div>
+
+        <form class="notes-form" id="notes-form">
+          <div class="form-row">
+            <div class="form-group form-group-author">
+              <label for="note-author">Author</label>
+              <select id="note-author" class="note-input">
+                <option value="Samuel">Samuel</option>
+                <option value="Keziah">Keziah</option>
+                <option value="Us">Us</option>
+              </select>
+            </div>
+            <div class="form-group form-group-date">
+              <label for="note-date">Date Stamp</label>
+              <input type="text" id="note-date" class="note-input" value="October 2026">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="note-text">Reflection / Note</label>
+            <textarea id="note-text" class="note-input note-textarea" rows="3" placeholder="Leave a reaction, thought, or note to keep..." required></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="note-submit-btn">
+              <i class="ph ph-heart-fill"></i>
+              <span>Add Reflection</span>
+            </button>
+          </div>
+        </form>
+      </section>
     </main>
 
     <footer class="beloved-footer">
@@ -439,5 +811,103 @@
 
   <script src="site-data.js"></script>
   <script src="app.js"></script>
+  <script>
+    (function initBelovedNotes() {
+      const STORAGE_KEY = "samuel_keziah_beloved_notes_v1";
+      const notesList = document.getElementById("notes-list");
+      const notesForm = document.getElementById("notes-form");
+      const noteAuthor = document.getElementById("note-author");
+      const noteDate = document.getElementById("note-date");
+      const noteText = document.getElementById("note-text");
+
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function getNotes() {
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveNotes(notes) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+        } catch (e) {}
+      }
+
+      function renderNotes() {
+        const notes = getNotes();
+        if (!notesList) return;
+
+        if (notes.length === 0) {
+          notesList.innerHTML = `
+            <div class="notes-empty-state">
+              No notes added yet. Use the box below to leave your first note or reflection.
+            </div>
+          `;
+          return;
+        }
+
+        notesList.innerHTML = notes
+          .map((note) => {
+            const authorClass = note.author ? "author-" + note.author.toLowerCase() : "";
+            return `
+              <div class="note-card" data-id="${note.id}">
+                <div class="note-card-meta">
+                  <span class="note-author-pill ${authorClass}">${escapeHtml(note.author || "Note")}</span>
+                  <div class="note-card-actions">
+                    <span class="note-date">${escapeHtml(note.date || "")}</span>
+                    <button class="note-delete-btn" title="Delete note" aria-label="Delete note" data-id="${note.id}">
+                      <i class="ph ph-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="note-content">${escapeHtml(note.text || "")}</div>
+              </div>
+            `;
+          })
+          .join("");
+
+        notesList.querySelectorAll(".note-delete-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = Number(btn.dataset.id);
+            const current = getNotes().filter((n) => n.id !== id);
+            saveNotes(current);
+            renderNotes();
+          });
+        });
+      }
+
+      if (notesForm) {
+        notesForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const text = noteText.value.trim();
+          if (!text) return;
+
+          const newNote = {
+            id: Date.now(),
+            author: noteAuthor.value || "Samuel",
+            date: noteDate.value || new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+            text: text
+          };
+
+          const notes = getNotes();
+          notes.push(newNote);
+          saveNotes(notes);
+
+          noteText.value = "";
+          renderNotes();
+        });
+      }
+
+      renderNotes();
+    })();
+  </script>
 </body>
 </html>
