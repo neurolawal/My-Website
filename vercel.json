@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/dearly-beloved", "destination": "/my-dearly-beloved.html" }
+    { "source": "/dearly-beloved", "destination": "/my-dearly-beloved.html" },
+    { "source": "/house-hunting", "destination": "/house-hunting.html" }
   ]
 }

@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>House Comparison — Decision Matrix &amp; Ranked Results</title>
+  <meta name="description" content="Editorial multi-criteria decision analysis tool for comparing prospective apartments and houses.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://www.samlawal.com/house-hunting.html">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <style>
+    /* ==========================================================================
+       Glossier Design System Tokens & Editorial Stylesheet
+       ========================================================================== */
+    :root {
+      /* Colors */
+      --color-glossier-yellow: #fff116;
+      --color-ink: #000000;
+      --color-paper: #ffffff;
+      --color-fog: #f7f7f7;
+      --color-blush: #faf2f4;
+      --color-mist: #f0f0f0;
+      --color-ash: #e8e8e8;
+      --color-graphite: #666666;
+      --color-slate: #464545;
+      --color-cobalt-tag: #0600ff;
+
+      /* Typography */
+      --font-body: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Monaco, Consolas, monospace;
+
+      /* Type Scale */
+      --text-caption: 12px;
+      --text-body-sm: 14px;
+      --text-body: 16px;
+      --text-subheading: 20px;
+      --text-heading: 32px;
+
+      /* Spacing */
+      --spacing-4: 4px;
+      --spacing-8: 8px;
+      --spacing-12: 12px;
+      --spacing-16: 16px;
+      --spacing-20: 20px;
+      --spacing-24: 24px;
+      --spacing-32: 32px;
+      --spacing-48: 48px;
+      --spacing-64: 64px;
+
+      /* Radius: 0px across all elements for sharp editorial precision */
+      --radius: 0px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body[data-page="house-hunting"] {
+      background-color: var(--color-fog);
+      color: var(--color-ink);
+      font-family: var(--font-body);
+      font-size: var(--text-body);
+      line-height: 1.5;
+      letter-spacing: 0.002em;
+      min-height: 100vh;
+      padding-bottom: 120px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Tabular numeric alignment */
+    .tabular-nums,
+    .hh-num,
+    .hh-weight-val,
+    .hh-score-display {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Links */
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* 1. Top Utility Announcement Bar */
+    .hh-announcement-bar {
+      background: var(--color-ink);
+      color: var(--color-paper);
+      padding: 7px 16px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hh-announcement-link {
+      color: #ccc;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s ease;
+    }
+
+    .hh-announcement-link:hover {
+      color: var(--color-paper);
+    }
+
+    .hh-save-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #aaa;
+    }
+
+    .hh-save-indicator.saved span::before {
+      content: "● ";
+      color: var(--color-glossier-yellow);
+    }
+
+    /* Layout Container */
+    .hh-shell {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* 2. Editorial Header */
+    .hh-masthead {
+      padding: 40px 0 28px;
+      border-bottom: 2px solid var(--color-ink);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      background: var(--color-fog);
+    }
+
+    .hh-masthead-main {
+      max-width: 760px;
+    }
+
+    .hh-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-graphite);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hh-title {
+      font-size: clamp(28px, 3.8vw, 42px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--color-ink);
+      margin-bottom: 8px;
+    }
+
+    .hh-subtitle {
+      font-size: 14px;
+      color: var(--color-graphite);
+      line-height: 1.45;
+    }
+
+    /* Header Actions & Meta */
+    .hh-masthead-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hh-meta-counter {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-graphite);
+      padding: 10px 14px;
+      border: 1px solid var(--color-ash);
+      background: var(--color-paper);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hh-meta-counter strong {
+      color: var(--color-ink);
+    }
+
+    /* Glossier Buttons (0px radius, flat, sharp) */
+    .hh-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-radius: 0px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 12px 18px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+      font-family: var(--font-body);
+      border: 1px solid transparent;
+    }
+
+    /* Outlined secondary button */
+    .hh-btn-outline {
+      background: var(--color-paper);
+      color: var(--color-ink);
+      border: 1px solid var(--color-ink);
+    }
+
+    .hh-btn-outline:hover {
+      background: var(--color-ink);
+      color: var(--color-paper);
+    }
+
+    .hh-btn-text {
+      background: transparent;
+      color: var(--color-graphite);
+      border: 1px solid var(--color-ash);
+      padding: 10px 14px;
+    }
+
+    .hh-btn-text:hover {
+      color: var(--color-ink);
+      border-color: var(--color-ink);
+      background: var(--color-paper);
+    }
+
+    /* The Iconic Glossier Yellow Primary Button */
+    .hh-btn-glossier-yellow {
+      background: var(--color-glossier-yellow);
+      color: var(--color-ink);
+      border: 1px solid var(--color-glossier-yellow);
+      padding: 12px 24px;
+      font-weight: 700;
+    }
+
+    .hh-btn-glossier-yellow:hover:not(:disabled) {
+      background: #faec00;
+      border-color: #faec00;
+      transform: translateY(-1px);
+    }
+
+    .hh-btn-glossier-yellow:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      border-color: transparent;
+    }
+
+    /* 3. Side-by-Side Comparison Matrix */
+    .hh-matrix-container {
+      margin-top: 24px;
+      background: var(--color-paper);
+      border: 1px solid var(--color-ash);
+      border-top: none;
+    }
+
+    .hh-table-scroller {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      position: relative;
+    }
+
+    .hh-matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      min-width: 860px;
+    }
+
+    /* Table Headers (Sticky on scroll) */
+    .hh-matrix-table th {
+      background: var(--color-paper);
+      padding: 18px 20px;
+      text-align: left;
+      vertical-align: top;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--color-ink);
+      border-right: 1px solid var(--color-ash);
+    }
+
+    .hh-matrix-table th:last-child {
+      border-right: none;
+    }
+
+    .hh-col-criteria {
+      width: 380px;
+      background: #fafafa !important;
+    }
+
+    .hh-col-house {
+      width: 320px;
+    }
+
+    .hh-house-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hh-house-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .hh-house-name-input {
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--color-ink);
+      border: 1px solid transparent;
+      background: transparent;
+      border-radius: 0;
+      padding: 4px 6px;
+      width: 100%;
+      outline: none;
+      transition: border 0.15s ease;
+    }
+
+    .hh-house-name-input:hover {
+      border-color: var(--color-ash);
+    }
+
+    .hh-house-name-input:focus {
+      border-color: var(--color-ink);
+      background: var(--color-fog);
+    }
+
+    .hh-delete-btn {
+      background: transparent;
+      border: none;
+      color: var(--color-graphite);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      transition: color 0.15s;
+    }
+
+    .hh-delete-btn:hover {
+      color: var(--color-ink);
+    }
+
+    .hh-house-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--color-graphite);
+      border-top: 1px solid var(--color-fog);
+      padding-top: 6px;
+    }
+
+    .hh-live-score {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 6px;
+      background: var(--color-fog);
+      color: var(--color-ink);
+      border-radius: 0;
+    }
+
+    /* Table Body Rows */
+    .hh-matrix-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--color-ash);
+      border-right: 1px solid var(--color-ash);
+      vertical-align: middle;
+      font-size: 14px;
+    }
+
+    .hh-matrix-table tr:hover td {
+      background: #fbfbfb;
+    }
+
+    .hh-matrix-table td:last-child {
+      border-right: none;
+    }
+
+    .hh-td-crit-cell {
+      background: #fafafa;
+    }
+
+    .hh-crit-header-wrap {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .hh-crit-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-ink);
+      line-height: 1.3;
+    }
+
+    .hh-crit-hint-text {
+      font-size: 12px;
+      color: var(--color-graphite);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    /* Weight Control in Criteria Column */
+    .hh-weight-strip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--color-paper);
+      border: 1px solid var(--color-ash);
+      padding: 6px 10px;
+    }
+
+    .hh-weight-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-graphite);
+      font-weight: 500;
+    }
+
+    .hh-weight-input {
+      flex: 1;
+      height: 2px;
+      accent-color: var(--color-ink);
+      cursor: pointer;
+      background: var(--color-ash);
+    }
+
+    .hh-weight-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-ink);
+      background: var(--color-fog);
+      padding: 2px 6px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    /* House Rating Cell & Tactile Slider */
+    .hh-rate-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hh-rate-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .hh-score-pill {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-ink);
+    }
+
+    .hh-score-fraction {
+      font-size: 11px;
+      color: var(--color-graphite);
+      font-weight: 400;
+    }
+
+    .hh-pts-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--color-graphite);
+    }
+
+    /* Flat Tactile Slider */
+    .hh-slider-wrap {
+      display: flex;
+      align-items: center;
+    }
+
+    .hh-slider {
+      width: 100%;
+      height: 4px;
+      accent-color: var(--color-ink);
+      cursor: pointer;
+      border-radius: 0;
+    }
+
+    .hh-tick-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: #999;
+    }
+
+    /* 4. Sticky Bottom Action Strip */
+    .hh-sticky-footer-wrap {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 99;
+      background: var(--color-paper);
+      border-top: 1px solid var(--color-ink);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .hh-sticky-footer {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .hh-footer-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hh-footer-brand {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding-right: 16px;
+      border-right: 1px solid var(--color-ash);
+    }
+
+    .hh-footer-msg h4 {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .hh-footer-msg p {
+      font-size: 12px;
+      color: var(--color-graphite);
+    }
+
+    /* 5. Editorial Ranked Results Section (Soft Blush Backdrop) */
+    .hh-results-wrap {
+      margin-top: 64px;
+      padding: 64px 0 48px;
+      border-top: 2px solid var(--color-ink);
+      background: var(--color-blush);
+      border-bottom: 1px solid var(--color-ash);
+      scroll-margin-top: 30px;
+    }
+
+    .hh-results-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .hh-results-masthead {
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--color-ash);
+      padding-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .hh-cobalt-badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--color-cobalt-tag);
+      color: var(--color-paper);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 0;
+      margin-bottom: 12px;
+    }
+
+    .hh-results-title {
+      font-size: clamp(24px, 3.2vw, 36px);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--color-ink);
+      line-height: 1.1;
+    }
+
+    .hh-results-summary-text {
+      font-size: 14px;
+      color: var(--color-graphite);
+      max-width: 700px;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    /* Ranked Cards Grid */
+    .hh-ranking-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 20px;
+    }
+
+    .hh-rank-card {
+      background: var(--color-paper);
+      border: 1px solid var(--color-ash);
+      border-radius: 0;
+      padding: 24px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hh-rank-card.is-winner {
+      border: 2px solid var(--color-ink);
+    }
+
+    .hh-winner-flash {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--color-glossier-yellow);
+      color: var(--color-ink);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-left: 2px solid var(--color-ink);
+      border-bottom: 2px solid var(--color-ink);
+    }
+
+    .hh-rank-card-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--color-ash);
+    }
+
+    .hh-rank-number {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-ink);
+      line-height: 1;
+    }
+
+    .hh-rank-house-name {
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--color-ink);
+      line-height: 1.2;
+    }
+
+    /* Score Meter */
+    .hh-rank-score-block {
+      background: var(--color-fog);
+      padding: 16px;
+      margin-bottom: 20px;
+      border: 1px solid var(--color-ash);
+    }
+
+    .hh-score-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .hh-score-pct {
+      font-family: var(--font-mono);
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--color-ink);
+    }
+
+    .hh-score-pct span {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--color-graphite);
+    }
+
+    .hh-score-pts-tally {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--color-graphite);
+    }
+
+    /* Thin Hairline Progress Bar (4px height) */
+    .hh-progress-track {
+      width: 100%;
+      height: 4px;
+      background: var(--color-ash);
+      border-radius: 0;
+      overflow: hidden;
+    }
+
+    .hh-progress-bar {
+      height: 100%;
+      background: var(--color-ink);
+      width: 0%;
+      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hh-rank-card.is-winner .hh-progress-bar {
+      background: var(--color-ink);
+    }
+
+    /* Strengths & Drawbacks Tags */
+    .hh-analysis-section {
+      margin-bottom: 16px;
+    }
+
+    .hh-analysis-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-graphite);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hh-tag-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hh-tag-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 0;
+      border: 1px solid var(--color-ash);
+      background: var(--color-paper);
+    }
+
+    .hh-tag-item.strength {
+      border-left: 3px solid var(--color-ink);
+    }
+
+    .hh-tag-item.drawback {
+      border-left: 3px solid var(--color-graphite);
+      color: #555;
+    }
+
+    .hh-tag-val {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    /* Modals (Sharp Editorial Style) */
+    .hh-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .hh-modal-backdrop.is-active {
+      display: flex;
+    }
+
+    .hh-modal-box {
+      background: var(--color-paper);
+      border: 2px solid var(--color-ink);
+      border-radius: 0;
+      max-width: 480px;
+      width: 100%;
+      padding: 32px;
+    }
+
+    .hh-modal-box h3 {
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+
+    .hh-modal-box p {
+      font-size: 13px;
+      color: var(--color-graphite);
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .hh-input-field {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--color-ash);
+      border-radius: 0;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--color-ink);
+      background: var(--color-paper);
+      margin-bottom: 16px;
+      outline: none;
+      transition: border 0.15s;
+    }
+
+    .hh-input-field:focus {
+      border: 2px solid var(--color-ink);
+    }
+
+    .hh-modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hh-masthead {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .hh-masthead-controls {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .hh-sticky-footer {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+      .hh-footer-info {
+        flex-direction: column;
+        gap: 6px;
+      }
+      .hh-footer-brand {
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 1px solid var(--color-ash);
+        padding-bottom: 6px;
+      }
+      .hh-btn-glossier-yellow {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body data-page="house-hunting">
+
+  <!-- 1. Utility Announcement Bar -->
+  <aside class="hh-announcement-bar">
+    <a href="index.html" class="hh-announcement-link">
+      <i class="ph ph-arrow-left"></i>
+      <span>Portfolio Home</span>
+    </a>
+    <div id="storage-status" class="hh-save-indicator saved">
+      <span>Autosaved to Browser Storage</span>
+    </div>
+  </aside>
+
+  <div class="hh-shell">
+
+    <!-- 2. Editorial Masthead -->
+    <header class="hh-masthead">
+      <div class="hh-masthead-main">
+        <div class="hh-eyebrow">
+          <span>Decision Analysis</span>
+          <span>/</span>
+          <span>MCDA Engine</span>
+        </div>
+        <h1 class="hh-title">House Comparison</h1>
+        <p class="hh-subtitle">
+          Weighted multi-criteria decision matrix. Calibrate priority weights, evaluate prospective properties from 0 to 10 across essential standards, and compute an objective, ranked evaluation with zero latency.
+        </p>
+      </div>
+
+      <!-- Controls & Metadata -->
+      <div class="hh-masthead-controls">
+        <div class="hh-meta-counter">
+          <span>Criteria: <strong id="stat-criteria-count">0</strong></span>
+          <span>&middot;</span>
+          <span>Properties: <strong id="stat-house-count">0</strong></span>
+          <span>&middot;</span>
+          <span>Weight: <strong id="stat-total-weight">0</strong></span>
+        </div>
+        <button id="btn-add-house" class="hh-btn hh-btn-outline" type="button">
+          <i class="ph ph-plus"></i>
+          <span>Add Property</span>
+        </button>
+        <button id="btn-add-criterion" class="hh-btn hh-btn-outline" type="button">
+          <i class="ph ph-plus"></i>
+          <span>Add Criterion</span>
+        </button>
+        <button id="btn-reset-workspace" class="hh-btn hh-btn-text" type="button" title="Restore default criteria">
+          <i class="ph ph-arrow-counter-clockwise"></i>
+          <span>Reset</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 3. Side-by-Side Comparison Matrix -->
+    <main class="hh-matrix-container">
+      <div class="hh-table-scroller">
+        <table class="hh-matrix-table" id="comparison-table">
+          <thead>
+            <tr id="table-header-row">
+              <th class="hh-col-criteria">
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                  <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-ink);">
+                    Evaluation Standards
+                  </span>
+                  <span style="font-size: 11px; font-family: var(--font-mono); color: var(--color-graphite);">
+                    Weight 1&ndash;10
+                  </span>
+                </div>
+              </th>
+              <!-- House column headers will be injected dynamically -->
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <!-- Criteria rows with sliders injected dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- 4. Sticky Bottom Action Strip -->
+  <aside class="hh-sticky-footer-wrap">
+    <div class="hh-sticky-footer" id="action-bar">
+      <div class="hh-footer-info">
+        <div class="hh-footer-brand">Glossier Editorial Engine</div>
+        <div class="hh-footer-msg">
+          <h4 id="action-bar-title">MCDA Matrix Ready</h4>
+          <p id="action-bar-subtitle">Add at least 2 properties to calculate ranked match scores.</p>
+        </div>
+      </div>
+      <div>
+        <button id="btn-run-analysis" class="hh-btn hh-btn-glossier-yellow" disabled type="button">
+          <span>Run Analysis &amp; Rank Properties</span>
+          <i class="ph ph-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 5. Editorial Ranked Results Section (Soft Warm Blush Surface) -->
+  <section class="hh-results-wrap" id="results-section" style="display: none;">
+    <div class="hh-results-inner">
+      <div class="hh-results-masthead">
+        <div>
+          <div class="hh-cobalt-badge">Verified Analysis</div>
+          <h2 class="hh-results-title">Ranked Evaluation</h2>
+          <p class="hh-results-summary-text" id="results-summary-text">
+            Normalized weighted scores computed using Multi-Criteria Decision Analysis.
+          </p>
+        </div>
+      </div>
+
+      <!-- Ranked Cards Grid -->
+      <div class="hh-ranking-list" id="rank-grid">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal: Add Criterion -->
+  <div class="hh-modal-backdrop" id="modal-add-criterion">
+    <div class="hh-modal-box">
+      <h3>New Decision Criterion</h3>
+      <p>Add a personal priority standard to include in the weighted analysis.</p>
+      <div>
+        <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Criterion Name</label>
+        <input type="text" id="new-crit-label" class="hh-input-field" placeholder="e.g. Natural Light &amp; Windows" required>
+      </div>
+      <div>
+        <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Description / Details (Optional)</label>
+        <input type="text" id="new-crit-hint" class="hh-input-field" placeholder="e.g. Morning sun, cross-ventilation">
+      </div>
+      <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">
+          <span>Initial Weight</span>
+          <span id="new-crit-weight-display" class="tabular-nums">5</span>
+        </div>
+        <input type="range" id="new-crit-weight" class="hh-slider" min="1" max="10" value="5">
+      </div>
+      <div class="hh-modal-buttons">
+        <button type="button" class="hh-btn hh-btn-text" id="btn-cancel-criterion">Cancel</button>
+        <button type="button" class="hh-btn hh-btn-outline" id="btn-save-criterion">Save Criterion</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add Property -->
+  <div class="hh-modal-backdrop" id="modal-add-house">
+    <div class="hh-modal-box">
+      <h3>New Property</h3>
+      <p>Enter the address or identifier for the prospective home.</p>
+      <div>
+        <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 6px;">Property Name / Location</label>
+        <input type="text" id="new-house-name" class="hh-input-field" placeholder="e.g. Apartment Alpha, Via Roma 12" required>
+      </div>
+      <div class="hh-modal-buttons">
+        <button type="button" class="hh-btn hh-btn-text" id="btn-cancel-house">Cancel</button>
+        <button type="button" class="hh-btn hh-btn-outline" id="btn-save-house">Create Property</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-Side MCDA Logic & Persistence Engine -->
+  <script>
+    (function () {
+      'use strict';
+
+      const STORAGE_KEY = 'hh_mcda_workspace_v1';
+
+      // 11 Pre-loaded criteria requested in Section 5
+      const DEFAULT_CRITERIA = [
+        {
+          id: 'crit-drainage',
+          label: 'Bathroom Drainage & Floor Slope',
+          hint: 'drainage of water, slope, bathroom drainage',
+          weight: 8
+        },
+        {
+          id: 'crit-toilet',
+          label: 'Toilet & Bidet Functionality',
+          hint: 'toilet flushing, working bidet',
+          weight: 8
+        },
+        {
+          id: 'crit-fixtures',
+          label: 'Bathroom Fixtures & Hangers',
+          hint: 'bathroom hanger setup',
+          weight: 5
+        },
+        {
+          id: 'crit-water',
+          label: 'Water Supply & Storage Capacity',
+          hint: 'two tanks, solar/generator pumping',
+          weight: 9
+        },
+        {
+          id: 'crit-electricity',
+          label: 'Electricity & Socket Availability',
+          hint: 'power supply & sockets',
+          weight: 9
+        },
+        {
+          id: 'crit-kitchen',
+          label: 'Kitchen Condition & Ventilation',
+          hint: 'kitchen quality & zero smell/odor',
+          weight: 7
+        },
+        {
+          id: 'crit-space',
+          label: 'Room Space & Wardrobe Layout',
+          hint: 'middle space for wardrobe',
+          weight: 7
+        },
+        {
+          id: 'crit-security',
+          label: 'Security, Keys & Door Sealing',
+          hint: 'gating, burglary proofing, house key, door sealing',
+          weight: 9
+        },
+        {
+          id: 'crit-neatness',
+          label: 'Building Condition & Neatness',
+          hint: 'new building & overall neatness',
+          weight: 8
+        },
+        {
+          id: 'crit-school',
+          label: 'Proximity to School',
+          hint: 'distance/commute to school',
+          weight: 8
+        },
+        {
+          id: 'crit-roommates',
+          label: 'Roommate / Housemate Compatibility',
+          hint: 'companionship with mates',
+          weight: 9
+        }
+      ];
+
+      // Default sample houses to immediately enable testing
+      const DEFAULT_HOUSES = [
+        {
+          id: 'house-1',
+          name: 'Apartment Alpha (Close to Campus)',
+          ratings: {
+            'crit-drainage': 8,
+            'crit-toilet': 9,
+            'crit-fixtures': 7,
+            'crit-water': 9,
+            'crit-electricity': 8,
+            'crit-kitchen': 7,
+            'crit-space': 8,
+            'crit-security': 9,
+            'crit-neatness': 9,
+            'crit-school': 10,
+            'crit-roommates': 8
+          }
+        },
+        {
+          id: 'house-2',
+          name: 'Apartment Beta (Spacious Suburb)',
+          ratings: {
+            'crit-drainage': 6,
+            'crit-toilet': 7,
+            'crit-fixtures': 8,
+            'crit-water': 7,
+            'crit-electricity': 9,
+            'crit-kitchen': 9,
+            'crit-space': 10,
+            'crit-security': 7,
+            'crit-neatness': 7,
+            'crit-school': 5,
+            'crit-roommates': 7
+          }
+        }
+      ];
+
+      // State
+      let state = {
+        criteria: [],
+        houses: []
+      };
+
+      // DOM Elements
+      const tableHeaderRow = document.getElementById('table-header-row');
+      const tableBody = document.getElementById('table-body');
+      const statHouseCount = document.getElementById('stat-house-count');
+      const statCriteriaCount = document.getElementById('stat-criteria-count');
+      const statTotalWeight = document.getElementById('stat-total-weight');
+      const actionBar = document.getElementById('action-bar');
+      const actionBarTitle = document.getElementById('action-bar-title');
+      const actionBarSubtitle = document.getElementById('action-bar-subtitle');
+      const btnRunAnalysis = document.getElementById('btn-run-analysis');
+      const resultsSection = document.getElementById('results-section');
+      const rankGrid = document.getElementById('rank-grid');
+      const resultsSummaryText = document.getElementById('results-summary-text');
+      const storageStatus = document.getElementById('storage-status');
+
+      // Modals
+      const modalAddCrit = document.getElementById('modal-add-criterion');
+      const modalAddHouse = document.getElementById('modal-add-house');
+      const btnAddHouse = document.getElementById('btn-add-house');
+      const btnAddCrit = document.getElementById('btn-add-criterion');
+      const btnResetWorkspace = document.getElementById('btn-reset-workspace');
+
+      // Initialize
+      function init() {
+        loadState();
+        render();
+        bindEvents();
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed.criteria) && parsed.criteria.length > 0 && Array.isArray(parsed.houses)) {
+              state = parsed;
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn('Could not read localStorage:', e);
+        }
+        // Fallback to defaults
+        state = {
+          criteria: JSON.parse(JSON.stringify(DEFAULT_CRITERIA)),
+          houses: JSON.parse(JSON.stringify(DEFAULT_HOUSES))
+        };
+        saveState();
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          indicateSaved();
+        } catch (e) {
+          console.warn('Could not save to localStorage:', e);
+        }
+      }
+
+      function indicateSaved() {
+        if (!storageStatus) return;
+        storageStatus.classList.add('saved');
+        storageStatus.innerHTML = '<span>Autosaved to Browser Storage</span>';
+      }
+
+      // Render the comparison matrix
+      function render() {
+        renderToolbarStats();
+        renderTableHeader();
+        renderTableBody();
+        updateActionBarState();
+      }
+
+      function renderToolbarStats() {
+        statHouseCount.textContent = state.houses.length;
+        statCriteriaCount.textContent = state.criteria.length;
+        const totalWeight = state.criteria.reduce((sum, c) => sum + (Number(c.weight) || 0), 0);
+        statTotalWeight.textContent = totalWeight;
+      }
+
+      function renderTableHeader() {
+        const headers = Array.from(tableHeaderRow.querySelectorAll('.hh-col-house'));
+        headers.forEach(h => h.remove());
+
+        state.houses.forEach((house, index) => {
+          const th = document.createElement('th');
+          th.className = 'hh-col-house';
+          th.innerHTML = `
+            <div class="hh-house-header">
+              <div class="hh-house-title-row">
+                <input
+                  type="text"
+                  class="hh-house-name-input"
+                  data-house-id="${house.id}"
+                  value="${escapeHtml(house.name)}"
+                  title="Click to rename"
+                  aria-label="House name"
+                />
+                <button
+                  type="button"
+                  class="hh-delete-btn"
+                  data-delete-house="${house.id}"
+                  title="Remove property"
+                >
+                  <i class="ph ph-x"></i>
+                </button>
+              </div>
+              <div class="hh-house-meta-row">
+                <span>Property 0${index + 1}</span>
+                <span class="hh-live-score" id="header-score-${house.id}">0.0%</span>
+              </div>
+            </div>
+          `;
+          tableHeaderRow.appendChild(th);
+        });
+      }
+
+      function renderTableBody() {
+        tableBody.innerHTML = '';
+
+        if (state.criteria.length === 0) {
+          const emptyRow = document.createElement('tr');
+          emptyRow.innerHTML = `
+            <td colspan="${state.houses.length + 1}" style="text-align: center; padding: 48px; color: var(--color-graphite);">
+              No criteria defined. Click "Add Criterion" above or "Reset" to restore defaults.
+            </td>
+          `;
+          tableBody.appendChild(emptyRow);
+          return;
+        }
+
+        state.criteria.forEach((crit) => {
+          const row = document.createElement('tr');
+
+          // 1. Criteria Column
+          const tdCrit = document.createElement('td');
+          tdCrit.className = 'hh-td-crit-cell';
+          tdCrit.innerHTML = `
+            <div class="hh-crit-header-wrap">
+              <div class="hh-crit-name">${escapeHtml(crit.label)}</div>
+              <button
+                type="button"
+                class="hh-delete-btn"
+                data-delete-crit="${crit.id}"
+                title="Remove criterion"
+              >
+                <i class="ph ph-trash"></i>
+              </button>
+            </div>
+            ${crit.hint ? `<div class="hh-crit-hint-text">${escapeHtml(crit.hint)}</div>` : ''}
+            <div class="hh-weight-strip">
+              <span class="hh-weight-label">Weight:</span>
+              <input
+                type="range"
+                class="hh-weight-slider hh-weight-input"
+                min="1"
+                max="10"
+                value="${crit.weight || 5}"
+                data-crit-id="${crit.id}"
+                aria-label="Weight for ${escapeHtml(crit.label)}"
+              />
+              <span class="hh-weight-badge tabular-nums" id="pill-weight-${crit.id}">${crit.weight || 5}</span>
+            </div>
+          `;
+          row.appendChild(tdCrit);
+
+          // 2. Rating columns for each house
+          state.houses.forEach((house) => {
+            const tdRating = document.createElement('td');
+            const ratingVal = (house.ratings && typeof house.ratings[crit.id] === 'number')
+              ? house.ratings[crit.id]
+              : 5;
+
+            const weightedPoints = (ratingVal * (crit.weight || 5));
+            const maxWeightedPoints = (10 * (crit.weight || 5));
+
+            tdRating.innerHTML = `
+              <div class="hh-rate-cell">
+                <div class="hh-rate-top">
+                  <div class="hh-score-pill">
+                    <span id="badge-${house.id}-${crit.id}" class="tabular-nums">${ratingVal}</span>
+                    <span class="hh-score-fraction">/ 10</span>
+                  </div>
+                  <span class="hh-pts-pill tabular-nums" id="pts-${house.id}-${crit.id}">
+                    ${weightedPoints}/${maxWeightedPoints} pts
+                  </span>
+                </div>
+                <div class="hh-slider-wrap">
+                  <input
+                    type="range"
+                    class="hh-rating-slider hh-slider"
+                    min="0"
+                    max="10"
+                    step="1"
+                    value="${ratingVal}"
+                    data-house-id="${house.id}"
+                    data-crit-id="${crit.id}"
+                    aria-label="Rating for ${escapeHtml(crit.label)} at ${escapeHtml(house.name)}"
+                  />
+                </div>
+                <div class="hh-tick-row">
+                  <span>0</span>
+                  <span>5</span>
+                  <span>10</span>
+                </div>
+              </div>
+            `;
+            row.appendChild(tdRating);
+          });
+
+          tableBody.appendChild(row);
+        });
+
+        // Update real-time header score pills
+        updateLiveHeaderPills();
+      }
+
+      function updateLiveHeaderPills() {
+        state.houses.forEach((house) => {
+          const pill = document.getElementById(`header-score-${house.id}`);
+          if (pill) {
+            const score = calculateHouseScore(house);
+            pill.textContent = `${score.matchPercent.toFixed(1)}%`;
+          }
+        });
+      }
+
+      function updateActionBarState() {
+        const houseCount = state.houses.length;
+        if (houseCount >= 2) {
+          btnRunAnalysis.removeAttribute('disabled');
+          actionBarTitle.textContent = `${houseCount} Properties Ready for Evaluation`;
+          actionBarSubtitle.textContent = `Calibrated across ${state.criteria.length} standards. Click to generate rankings.`;
+        } else {
+          btnRunAnalysis.setAttribute('disabled', 'true');
+          actionBarTitle.textContent = `Minimum 2 Properties Required`;
+          actionBarSubtitle.textContent = `Currently ${houseCount} property listed. Add at least 2 to run the comparison engine.`;
+        }
+      }
+
+      // ========================================================================
+      // Client-Side MCDA Analysis Engine
+      // ========================================================================
+      // Formula:
+      // Match Score (%) = [ Sum(Rating_i * Weight_i) / Sum(10 * Weight_i) ] * 100
+      function calculateHouseScore(house) {
+        let weightedPointsSum = 0;
+        let maxWeightedPointsSum = 0;
+        const criteriaDetails = [];
+
+        state.criteria.forEach((crit) => {
+          const weight = Number(crit.weight) || 0;
+          const rating = (house.ratings && typeof house.ratings[crit.id] === 'number')
+            ? Number(house.ratings[crit.id])
+            : 0;
+
+          const points = rating * weight;
+          const maxPoints = 10 * weight;
+
+          weightedPointsSum += points;
+          maxWeightedPointsSum += maxPoints;
+
+          criteriaDetails.push({
+            critId: crit.id,
+            label: crit.label,
+            hint: crit.hint,
+            weight: weight,
+            rating: rating,
+            points: points,
+            maxPoints: maxPoints,
+            ratio: maxPoints > 0 ? points / maxPoints : 0
+          });
+        });
+
+        const matchPercent = maxWeightedPointsSum > 0
+          ? (weightedPointsSum / maxWeightedPointsSum) * 100
+          : 0;
+
+        // Top Strengths: Highest point contribution
+        const sortedDesc = [...criteriaDetails].sort((a, b) => b.points - a.points || b.rating - a.rating);
+        const topStrengths = sortedDesc.slice(0, 3);
+
+        // Weakest Areas: Lowest ratio / lowest rating
+        const sortedAsc = [...criteriaDetails].sort((a, b) => a.rating - b.rating || a.points - b.points);
+        const weakestAreas = sortedAsc.slice(0, 3);
+
+        return {
+          houseId: house.id,
+          houseName: house.name,
+          weightedPoints: weightedPointsSum,
+          maxWeightedPoints: maxWeightedPointsSum,
+          matchPercent: matchPercent,
+          topStrengths: topStrengths,
+          weakestAreas: weakestAreas,
+          criteriaDetails: criteriaDetails
+        };
+      }
+
+      function runMCDAAnalysis() {
+        if (state.houses.length < 2) return;
+
+        // Compute scores for all houses
+        const results = state.houses.map(h => calculateHouseScore(h));
+
+        // Rank from #1 (Best Fit) to Worst Fit
+        results.sort((a, b) => b.matchPercent - a.matchPercent || b.weightedPoints - a.weightedPoints);
+
+        // Render Results Cards
+        rankGrid.innerHTML = '';
+        const winner = results[0];
+        const runnerUp = results[1];
+        const margin = (winner.matchPercent - runnerUp.matchPercent).toFixed(1);
+
+        resultsSummaryText.innerHTML = `
+          <strong>#1 Best Fit:</strong> <span style="color: var(--color-ink); font-weight: 700;">${escapeHtml(winner.houseName)}</span>
+          leads the evaluation with a <strong>${winner.matchPercent.toFixed(1)}% Match Score</strong>
+          (${winner.weightedPoints.toFixed(0)} of ${winner.maxWeightedPoints.toFixed(0)} weighted points),
+          outperforming the runner-up by <strong>${margin}%</strong>.
+        `;
+
+        results.forEach((res, idx) => {
+          const rank = idx + 1;
+          const isWinner = (rank === 1);
+          const card = document.createElement('div');
+          card.className = `hh-rank-card ${isWinner ? 'is-winner' : ''}`;
+
+          card.innerHTML = `
+            ${isWinner ? `
+              <div class="hh-winner-flash">
+                <span>Best Overall Fit</span>
+              </div>
+            ` : ''}
+
+            <div>
+              <div class="hh-rank-card-header">
+                <div class="hh-rank-number">0${rank}</div>
+                <div class="hh-rank-house-name">${escapeHtml(res.houseName)}</div>
+              </div>
+
+              <!-- Score Meter -->
+              <div class="hh-rank-score-block">
+                <div class="hh-score-row">
+                  <div class="hh-score-pct">
+                    ${res.matchPercent.toFixed(1)}<span>%</span>
+                  </div>
+                  <div class="hh-score-pts-tally tabular-nums">
+                    <strong>${res.weightedPoints}</strong> / ${res.maxWeightedPoints} pts
+                  </div>
+                </div>
+                <div class="hh-progress-track">
+                  <div class="hh-progress-bar" id="fill-${res.houseId}" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <!-- Top Strengths -->
+              <div class="hh-analysis-section">
+                <div class="hh-analysis-label">
+                  <i class="ph ph-arrow-up-right"></i>
+                  <span>Top Strengths</span>
+                </div>
+                <div class="hh-tag-list">
+                  ${res.topStrengths.map(s => `
+                    <div class="hh-tag-item strength">
+                      <span>${escapeHtml(s.label)}</span>
+                      <span class="hh-tag-val tabular-nums">${s.rating}/10 &middot; ${s.points} pts</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Weakest Areas -->
+              <div class="hh-analysis-section">
+                <div class="hh-analysis-label">
+                  <i class="ph ph-arrow-down-right"></i>
+                  <span>Lowest Ranked Factors</span>
+                </div>
+                <div class="hh-tag-list">
+                  ${res.weakestAreas.map(w => `
+                    <div class="hh-tag-item drawback">
+                      <span>${escapeHtml(w.label)}</span>
+                      <span class="hh-tag-val tabular-nums">${w.rating}/10 &middot; ${w.points} pts</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 12px; border-top: 1px solid var(--color-ash); display: flex; justify-content: space-between; align-items: center; font-size: 11px; text-transform: uppercase; color: var(--color-graphite);">
+              <span>Efficiency Index</span>
+              <strong style="color: var(--color-ink);" class="tabular-nums">
+                ${((res.weightedPoints / (res.maxWeightedPoints || 1)) * 100).toFixed(1)}%
+              </strong>
+            </div>
+          `;
+
+          rankGrid.appendChild(card);
+        });
+
+        // Reveal results section
+        resultsSection.style.display = 'block';
+
+        // Trigger smooth scroll
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Animate score bars after reveal
+        setTimeout(() => {
+          results.forEach((res) => {
+            const fill = document.getElementById(`fill-${res.houseId}`);
+            if (fill) {
+              fill.style.width = `${Math.min(100, Math.max(0, res.matchPercent))}%`;
+            }
+          });
+        }, 100);
+      }
+
+      // ========================================================================
+      // Event Handlers & Interactions
+      // ========================================================================
+      function bindEvents() {
+        // Table body rating slider change
+        tableBody.addEventListener('input', (e) => {
+          if (e.target.classList.contains('hh-rating-slider')) {
+            const houseId = e.target.dataset.houseId;
+            const critId = e.target.dataset.critId;
+            const val = Number(e.target.value);
+
+            const house = state.houses.find(h => h.id === houseId);
+            const crit = state.criteria.find(c => c.id === critId);
+            if (house && crit) {
+              if (!house.ratings) house.ratings = {};
+              house.ratings[critId] = val;
+
+              // Update live rating badge
+              const badge = document.getElementById(`badge-${houseId}-${critId}`);
+              if (badge) {
+                badge.textContent = val;
+              }
+
+              // Update pts label
+              const pts = document.getElementById(`pts-${houseId}-${critId}`);
+              if (pts) {
+                const w = Number(crit.weight) || 0;
+                pts.textContent = `${val * w}/${10 * w} pts`;
+              }
+
+              updateLiveHeaderPills();
+              saveState();
+            }
+          }
+
+          // Criteria Weight Slider change
+          if (e.target.classList.contains('hh-weight-slider')) {
+            const critId = e.target.dataset.critId;
+            const weightVal = Number(e.target.value);
+            const crit = state.criteria.find(c => c.id === critId);
+            if (crit) {
+              crit.weight = weightVal;
+              const pill = document.getElementById(`pill-weight-${critId}`);
+              if (pill) pill.textContent = weightVal;
+
+              // Refresh pts for each house for this criterion
+              state.houses.forEach((house) => {
+                const pts = document.getElementById(`pts-${house.id}-${critId}`);
+                if (pts) {
+                  const rating = (house.ratings && typeof house.ratings[critId] === 'number') ? house.ratings[critId] : 5;
+                  pts.textContent = `${rating * weightVal}/${10 * weightVal} pts`;
+                }
+              });
+
+              renderToolbarStats();
+              updateLiveHeaderPills();
+              saveState();
+            }
+          }
+        });
+
+        // House Name Editing
+        tableHeaderRow.addEventListener('input', (e) => {
+          if (e.target.classList.contains('hh-house-name-input')) {
+            const houseId = e.target.dataset.houseId;
+            const house = state.houses.find(h => h.id === houseId);
+            if (house) {
+              house.name = e.target.value.trim() || 'Untitled Property';
+              saveState();
+            }
+          }
+        });
+
+        // Delete House
+        tableHeaderRow.addEventListener('click', (e) => {
+          const delBtn = e.target.closest('[data-delete-house]');
+          if (delBtn) {
+            const houseId = delBtn.dataset.deleteHouse;
+            const house = state.houses.find(h => h.id === houseId);
+            if (confirm(`Remove "${house ? house.name : 'this property'}"?`)) {
+              state.houses = state.houses.filter(h => h.id !== houseId);
+              saveState();
+              render();
+            }
+          }
+        });
+
+        // Delete Criterion
+        tableBody.addEventListener('click', (e) => {
+          const delBtn = e.target.closest('[data-delete-crit]');
+          if (delBtn) {
+            const critId = delBtn.dataset.deleteCrit;
+            const crit = state.criteria.find(c => c.id === critId);
+            if (confirm(`Remove criterion "${crit ? crit.label : ''}"?`)) {
+              state.criteria = state.criteria.filter(c => c.id !== critId);
+              // Clean up ratings
+              state.houses.forEach(h => {
+                if (h.ratings && h.ratings[critId] !== undefined) {
+                  delete h.ratings[critId];
+                }
+              });
+              saveState();
+              render();
+            }
+          }
+        });
+
+        // Run Analysis button
+        btnRunAnalysis.addEventListener('click', runMCDAAnalysis);
+
+        // Reset Workspace
+        btnResetWorkspace.addEventListener('click', () => {
+          if (confirm('Reset workspace to the 11 default criteria and sample properties?')) {
+            state = {
+              criteria: JSON.parse(JSON.stringify(DEFAULT_CRITERIA)),
+              houses: JSON.parse(JSON.stringify(DEFAULT_HOUSES))
+            };
+            saveState();
+            render();
+            resultsSection.style.display = 'none';
+          }
+        });
+
+        // Add House Modal flow
+        btnAddHouse.addEventListener('click', () => {
+          const input = document.getElementById('new-house-name');
+          input.value = `Property ${String.fromCharCode(65 + state.houses.length)}`;
+          modalAddHouse.classList.add('is-active');
+          input.focus();
+        });
+
+        document.getElementById('btn-cancel-house').addEventListener('click', () => {
+          modalAddHouse.classList.remove('is-active');
+        });
+
+        document.getElementById('btn-save-house').addEventListener('click', () => {
+          const input = document.getElementById('new-house-name');
+          const name = input.value.trim() || `Property ${String.fromCharCode(65 + state.houses.length)}`;
+          const newId = `house-${Date.now()}`;
+
+          const newHouse = {
+            id: newId,
+            name: name,
+            ratings: {}
+          };
+          // Initialize ratings with 5
+          state.criteria.forEach(c => {
+            newHouse.ratings[c.id] = 5;
+          });
+
+          state.houses.push(newHouse);
+          saveState();
+          modalAddHouse.classList.remove('is-active');
+          render();
+        });
+
+        // Add Criterion Modal flow
+        btnAddCrit.addEventListener('click', () => {
+          document.getElementById('new-crit-label').value = '';
+          document.getElementById('new-crit-hint').value = '';
+          document.getElementById('new-crit-weight').value = '5';
+          document.getElementById('new-crit-weight-display').textContent = '5';
+          modalAddCrit.classList.add('is-active');
+        });
+
+        document.getElementById('new-crit-weight').addEventListener('input', (e) => {
+          document.getElementById('new-crit-weight-display').textContent = e.target.value;
+        });
+
+        document.getElementById('btn-cancel-criterion').addEventListener('click', () => {
+          modalAddCrit.classList.remove('is-active');
+        });
+
+        document.getElementById('btn-save-criterion').addEventListener('click', () => {
+          const labelInput = document.getElementById('new-crit-label');
+          const hintInput = document.getElementById('new-crit-hint');
+          const weightInput = document.getElementById('new-crit-weight');
+
+          const label = labelInput.value.trim();
+          if (!label) {
+            alert('Please enter a criterion title.');
+            labelInput.focus();
+            return;
+          }
+
+          const newCrit = {
+            id: `crit-${Date.now()}`,
+            label: label,
+            hint: hintInput.value.trim(),
+            weight: Number(weightInput.value) || 5
+          };
+
+          state.criteria.push(newCrit);
+
+          // Initialize rating for this criterion across existing houses
+          state.houses.forEach(h => {
+            if (!h.ratings) h.ratings = {};
+            h.ratings[newCrit.id] = 5;
+          });
+
+          saveState();
+          modalAddCrit.classList.remove('is-active');
+          render();
+        });
+
+        // Close modals on overlay click
+        [modalAddHouse, modalAddCrit].forEach(m => {
+          m.addEventListener('click', (e) => {
+            if (e.target === m) {
+              m.classList.remove('is-active');
+            }
+          });
+        });
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      // Start the application
+      init();
+    })();
+  </script>
+</body>
+</html>
